@@ -18,10 +18,7 @@ fun main(){
 //endregion
 }
 
-fun check(testName: String, result: Boolean, acceptedResult: Boolean){
-    if (result == acceptedResult){
-        println("Success - $testName")
-    } else{
-        println("Failed - $testName")
-    }
+fun <T> check(testName: String, expectedResult: T, actualResult: T) {
+    if(expectedResult == actualResult) println("Success - $testName")
+    else println("Fail - $testName")
 }
