@@ -1,6 +1,18 @@
 fun main(args: Array<String>) {
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+
 }
+
+fun checkAddCategory(categoryName:String):Boolean{
+    return false
+}
+fun checkDeleteCategory(categoryId:Any):Boolean{
+    return false
+}
+fun checkViewCategory(categories:List<Category>):Boolean{
+    return false
+}
+fun checkEditCategory(categoryName:String,categoryId:Any):Boolean{
+    return false
+}
+
