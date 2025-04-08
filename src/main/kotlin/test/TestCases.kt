@@ -1,5 +1,7 @@
 package test
 
+
+fun main(){
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
 
@@ -10,8 +12,16 @@ package test
 
 //endregion
 
-//region Category Test Cases
+//region Report Test Cases
 //todo: write all test cases that related with Report here :)
 
 //endregion
+}
 
+fun check(testName: String, result: Boolean, acceptedResult: Boolean){
+    if (result == acceptedResult){
+        println("Success - $testName")
+    } else{
+        println("Failed - $testName")
+    }
+}
