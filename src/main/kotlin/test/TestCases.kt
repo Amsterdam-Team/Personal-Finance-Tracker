@@ -58,6 +58,24 @@ fun main(){
     )
     //endregion
 
+    // region view transaction test cases
+    check(
+        testName = "when transaction id is not found then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    check(
+        testName = "when transaction id is found then should return transaction",
+        result= true,
+        acceptedResult = true,
+    )
+    check(
+        testName = "when transaction name is not valid then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    // endregion
+
 //endregion
 
 //region Category Test Cases
