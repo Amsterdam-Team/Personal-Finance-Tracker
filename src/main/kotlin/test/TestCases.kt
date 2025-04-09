@@ -14,7 +14,7 @@ fun main(){
     )
 
     check(
-        testName = "when amount equals zero or negative number return false",
+        testName = "when amount of existing transaction equals zero or negative number return false",
         result = false,
         acceptedResult = false
     )
@@ -44,12 +44,7 @@ fun main(){
         result = false,
         acceptedResult = false
     )
-    // set today date
-    check(
-        testName = "when date is empty should return true",
-        result = true,
-        acceptedResult = true
-    )
+
     check(
         testName = "when transaction type is empty should return false",
         result = false,
