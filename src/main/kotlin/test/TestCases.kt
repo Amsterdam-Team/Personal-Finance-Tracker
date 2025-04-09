@@ -1,11 +1,9 @@
 package test
 
 import Category
-import checkAddCategory
-import checkDeleteCategory
-import checkEditCategory
-import checkViewCategory
+import category_manager
 
+val cat_manager=category_manager()
 
 fun main(){
 
@@ -68,134 +66,142 @@ fun main(){
 
 //region Category Test Cases
 
-    //add Category Test Case
+    // region add Category Test Case
     check(
-        testName = "When the user adds a category with a valid name return true",
-        result = checkAddCategory("Food"),
+        testName = "When the user adds a category with a valid name should return true",
+        result = test.cat_manager.checkAddCategory("Food"),
         acceptedResult =true ,
     )
     check(
-        testName = "When the user tries to add a category with the same name",
-        result = checkAddCategory("Food"),
+        testName = "When the user tries to add a category with the same name should return false ",
+        result = test.cat_manager.checkAddCategory("Food"),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a category with an empty string",
-        result = checkAddCategory(""),
+        testName = "When the user tries to add a category with an empty string should return false",
+        result = test.cat_manager.checkAddCategory(""),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a category with special character",
-        result = checkAddCategory("@"),
+        testName = "When the user tries to add a category with special character should return false",
+        result = test.cat_manager.checkAddCategory("@"),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add invalid category type",
-        result = checkAddCategory("54556"),
+        testName = "When the user tries to add invalid category type should return false",
+        result = test.cat_manager.checkAddCategory("54556"),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a category with spaces",
-        result = checkAddCategory(" Rent "),
+        testName = "When the user tries to add a category with spaces should return false",
+        result = test.cat_manager.checkAddCategory(" Rent "),
         acceptedResult =false ,
     )
+    //endregion
 
 
-    //Edit Category Test Case
+
+    // region Edit Category Test Case
     check(
-        testName = "When the user edit a category with a valid name and valid id return true",
-        result = checkEditCategory("Food",1),
+        testName = "When the user edit a category with a valid name and valid id should return true",
+        result = test.cat_manager.checkEditCategory("Food",1),
         acceptedResult =true ,
     )
     check(
-        testName = "When the user tries to edit a category with the same name and valid id return false",
-        result = checkEditCategory("Food",1),
+        testName = "When the user tries to edit a category with the same name and valid id should return false",
+        result = test.cat_manager.checkEditCategory("Food",1),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to edit a category with an empty string and valid id return false",
-        result = checkEditCategory("",2),
+        testName = "When the user tries to edit a category with an empty string and valid id should return false",
+        result = test.cat_manager.checkEditCategory("",2),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a category with special character and invalid id (out of range) return false",
-        result = checkEditCategory("@",10000),
+        testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
+        result = test.cat_manager.checkEditCategory("@",10000),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add invalid category type and valid id return false",
-        result = checkEditCategory("54556",3),
+        testName = "When the user tries to add invalid category type and valid id should return false",
+        result = test.cat_manager.checkEditCategory("54556",3),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a category with spaces and valid id return false",
-        result = checkEditCategory(" Rent ",2),
+        testName = "When the user tries to add a category with spaces and valid id should return false",
+        result = test.cat_manager.checkEditCategory(" Rent ",2),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a valid category name and negative id return false",
-        result = checkEditCategory("Food",-2),
+        testName = "When the user tries to add a valid category name and negative id should return false",
+        result = test.cat_manager.checkEditCategory("Food",-2),
         acceptedResult =false ,
     )
     check(
-        testName = "When the user tries to add a valid category name and invalid type of id return false",
-        result = checkEditCategory("Food",'@'),
+        testName = "When the user tries to add a valid category name and invalid type of id should return false",
+        result = test.cat_manager.checkEditCategory("Food",'@'),
         acceptedResult =false ,
     )
+    //endregion
 
 
-    //View Category Test Case
+
+    //region View Category Test Case
     check(
-        testName = "When exist list of category return true",
-        result =checkViewCategory(listOf(
+        testName = "When exist list of category should return true",
+        result =test.cat_manager.checkViewCategory(listOf(
             Category("Food",1),
             Category("Rent",2),
         )),
         acceptedResult = true
     )
     check(
-        testName = "When not exist list of category return false",
-        result =checkViewCategory(listOf()),
+        testName = "When not exist list of category should return false",
+        result =test.cat_manager.checkViewCategory(listOf()),
         acceptedResult = false
     )
+    //endregion
 
 
-    //Delete Category Test Case
+
+    // region Delete Category Test Case
     check(
-        testName = "When user enter valid id return true",
-        result = checkDeleteCategory(2),
+        testName = "When user enter valid id should return true",
+        result = test.cat_manager.checkDeleteCategory(2),
         acceptedResult = true
     )
     check(
-        testName = "When user enter negative id return false",
-        result = checkDeleteCategory(-5),
+        testName = "When user enter negative id should return false",
+        result = test.cat_manager.checkDeleteCategory(-5),
         acceptedResult = false
     )
     check(
-        testName = "When user enter id equal zero return false",
-        result = checkDeleteCategory(0),
+        testName = "When user enter id equal zero should return false",
+        result = test.cat_manager.checkDeleteCategory(0),
         acceptedResult = false
     )
     check(
-        testName = "When user enter id out of range from id's that displayed return false",
-        result = checkDeleteCategory(10000),
+        testName = "When user enter id out of range from id's that displayed should return false",
+        result = test.cat_manager.checkDeleteCategory(10000),
         acceptedResult = false
     )
     check(
-        testName = "When user enter character rather than int return false",
-        result = checkDeleteCategory('@'),
+        testName = "When user enter character rather than int should return false",
+        result = test.cat_manager.checkDeleteCategory('@'),
         acceptedResult = false
     )
     check(
-        testName = "When user enter string rather than int return false",
-        result = checkDeleteCategory("hello"),
+        testName = "When user enter string rather than int should return false",
+        result = test.cat_manager.checkDeleteCategory("hello"),
         acceptedResult = false
     )
     check(
-        testName = "When user enter space rather than int return false",
-        result = checkDeleteCategory(' '),
+        testName = "When user enter space rather than int should return false",
+        result = test.cat_manager.checkDeleteCategory(' '),
         acceptedResult = false
     )
+    //endregion
+
 
 //endregion
 
