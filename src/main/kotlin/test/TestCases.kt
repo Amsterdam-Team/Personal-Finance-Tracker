@@ -5,6 +5,23 @@ fun main(){
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
+    // region view transaction test cases
+    check(
+        testName = "when transaction name is not found then should return false",
+                result= false,
+        acceptedResult = false,
+    )
+    check(
+        testName = "when transaction name is found then should return true",
+        result= true,
+        acceptedResult = true,
+    )
+    check(
+        testName = "when transaction name is empty then should return false",
+        result= false,
+        acceptedResult = false,
+    )
+    // endregion
     //region add transaction test cases
     check(
         testName = "when amount is less than or equal zero number should return false",
