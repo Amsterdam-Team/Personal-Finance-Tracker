@@ -1,2 +1,4 @@
-class Category (categoryName:String,categoryId:Int){
-}
+data class Category (
+    var categoryName:String,
+    var categoryId:Int
+)
