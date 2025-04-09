@@ -1,0 +1,24 @@
+name: Run Code Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ] # عدّل حسب فرعك
+
+jobs:
+  run-checks:
+    name: Run Kotlin TestCases
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Kotlin compiler
+        run: |
+          sudo apt update
+          sudo apt install -y kotlin
+
+      - name: Compile and Run Kotlin Tests
+        run: |
+          kotlinc src/test/TestCases.kt -include-runtime -d TestCases.jar
+          java -jar TestCases.jar
