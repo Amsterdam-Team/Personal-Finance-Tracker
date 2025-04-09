@@ -12,7 +12,7 @@ fun main(){
 
 //endregion
 
-//region Report Test Cases
+//region view balance report test cases
     check(
         testName = "1. When there are no transactions in the date range, should return zero income, zero expenses, and zero net balance",
         expectedResult = "",
@@ -49,6 +49,23 @@ fun main(){
         actualResult = ""
     )
 
+    check(
+        testName = "7. When transactions fall exactly on the start or end date, should include them in the result",
+        expectedResult = "",
+        actualResult = ""
+    )
+
+    check(
+        testName = "8. When transactions exist but are completely outside the date range, should be excluded from the result",
+        expectedResult = "",
+        actualResult = ""
+    )
+
+    check(
+        testName = "9. When all transactions in the range have zero amounts, should return zero income, zero expense, and zero net balance",
+        expectedResult = "",
+        actualResult = ""
+    )
 //endregion
 }
 
