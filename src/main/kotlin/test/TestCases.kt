@@ -22,9 +22,14 @@ fun main(){
         acceptedResult = false
     )
     check(
-        testName = "when description is invalid like (numbers,special characters) or empty should return false",
+        testName = "when description is invalid like (numbers,special characters) should return false",
         result = false,
         acceptedResult = false
+    )
+    check(
+        testName = "when description is empty should return true",
+        result = true,
+        acceptedResult = true
     )
     check(
         testName = "when date is invalid should return false",
@@ -32,12 +37,22 @@ fun main(){
         acceptedResult = false
     )
     check(
-        testName = "when transaction type isn't empty should return false",
+        testName = "when date is empty should return false",
         result = false,
         acceptedResult = false
     )
     check(
-        testName = "when category type isn't empty should return false",
+        testName = "when transaction type is empty should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when category type is empty should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when category is invalid like (numbers,special characters) should return false",
         result = false,
         acceptedResult = false
     )
