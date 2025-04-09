@@ -69,6 +69,18 @@ fun main(){
 //todo: write all test cases that related with Report here :)
 
 //endregion
+
+
+//region Monthly Summary Test Cases
+
+    check(testName = "when no transactions in month should return NoTransactions", result = false, acceptedResult = false)
+    check(testName = "when year is after now should return error", result = false, acceptedResult = false)
+    check(testName = "when month is after current month in current year should return error", result = false, acceptedResult = false)
+    check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
+    check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
+    check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
+
+//endregion
 }
 
 fun check(testName: String, result: Boolean, acceptedResult: Boolean){
