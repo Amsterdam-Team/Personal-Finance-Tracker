@@ -70,7 +70,7 @@ fun main(){
         acceptedResult = true,
     )
     check(
-        testName = "when transaction name is not valid then should return null",
+        testName = "when transaction id is not valid then should return null",
         result= false,
         acceptedResult = false,
     )
