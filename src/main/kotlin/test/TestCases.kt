@@ -1,9 +1,7 @@
 package test
 
-import models.Transaction
 
-
-fun main() {
+fun main(){
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
@@ -59,33 +57,7 @@ fun main() {
         acceptedResult = false
     )
     //endregion
-    //region delete transaction test cases
-    check(
-        testName = "when there is no any transaction added before should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "When entered id does not match the id schema should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id doesn't exist in the transactions should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id is less than zero should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id is founded should return true",
-        result = true,
-        acceptedResult = true
-    )
-    //endregion
+
 //endregion
 
 //region Category Test Cases
@@ -93,9 +65,60 @@ fun main() {
 
 //endregion
 
-//region Report Test Cases
-//todo: write all test cases that related with Report here :)
+//region view balance report test cases
+    check(
+        testName = "1. When there are no transactions in the date range, should return zero income, zero expenses, and zero net balance",
+        result = "",
+        acceptedResult = ""
+    )
 
+    check(
+        testName = "2. When only income transactions exist in the date range, should return correct income total and zero expenses",
+        result = "",
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "3. When only expense transactions exist in the date range, should return correct expense total and zero income",
+        result = "",
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "4. When both income and expense transactions exist, should return correct totals and net balance",
+        result = "",
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "5. When start date is after end date, should return null",
+        result = null,
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "6. When start or end date is invalid should return null",
+        result = null,
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "7. When transactions fall exactly on the start or end date, should include them in the result",
+        result = "",
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "8. When transactions exist but are completely outside the date range, should be excluded from the result",
+        result = "",
+        acceptedResult = ""
+    )
+
+    check(
+        testName = "9. When all transactions in the range have zero amounts, should return zero income, zero expense, and zero net balance",
+        result = "",
+        acceptedResult = ""
+    )
 //endregion
 
 
@@ -111,10 +134,7 @@ fun main() {
 //endregion
 }
 
-fun check(testName: String, result: Boolean, acceptedResult: Boolean) {
-    if (result == acceptedResult) {
-        println("Success - $testName")
-    } else {
-        println("Failed - $testName")
-    }
+fun <T> check(testName: String, result: T, acceptedResult: T) {
+    if(result == acceptedResult) println("Success - $testName")
+    else println("Fail - $testName")
 }
