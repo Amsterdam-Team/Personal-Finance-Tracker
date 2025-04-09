@@ -66,7 +66,7 @@ fun main() {
         acceptedResult = false
     )
     check(
-        testName = "when entered id is anything except the numbers should return false",
+        testName = "When entered id does not match the id schema should return false",
         result = false,
         acceptedResult = false
     )
@@ -79,6 +79,11 @@ fun main() {
         testName = "when entered id is less than zero should return false",
         result = false,
         acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
+        acceptedResult = true
     )
     //endregion
 //endregion
