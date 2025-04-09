@@ -5,7 +5,7 @@ import models.Response
 import models.Transaction
 import java.time.LocalDate
 
-class MemoryDataSource(var data : List<Transaction>) : ReportDataSource, TransactionDataSource {
+class MemoryDataSource(var data : List<Transaction>) : DataSource {
     override fun getMonthlySummaryReport(month: LocalDate): Response<MonthlySummaryReport> {
         TODO("Not yet implemented")
     }

@@ -5,7 +5,7 @@ import models.Response
 import models.Transaction
 import java.time.LocalDate
 
-class FileDataSource(val fileName: String) : ReportDataSource, TransactionDataSource{
+class FileDataSource(val fileName: String) : DataSource{
     // get data from file function
     // save data to file function
     override fun getMonthlySummaryReport(month: LocalDate): Response<MonthlySummaryReport> {
