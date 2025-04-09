@@ -68,56 +68,56 @@ fun main(){
 //region view balance report test cases
     check(
         testName = "1. When there are no transactions in the date range, should return zero income, zero expenses, and zero net balance",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "2. When only income transactions exist in the date range, should return correct income total and zero expenses",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "3. When only expense transactions exist in the date range, should return correct expense total and zero income",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "4. When both income and expense transactions exist, should return correct totals and net balance",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "5. When start date is after end date, should return null",
-        expectedResult = null,
-        actualResult = ""
+        result = null,
+        acceptedResult = ""
     )
 
     check(
         testName = "6. When start or end date is invalid should return null",
-        expectedResult = null,
-        actualResult = ""
+        result = null,
+        acceptedResult = ""
     )
 
     check(
         testName = "7. When transactions fall exactly on the start or end date, should include them in the result",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "8. When transactions exist but are completely outside the date range, should be excluded from the result",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 
     check(
         testName = "9. When all transactions in the range have zero amounts, should return zero income, zero expense, and zero net balance",
-        expectedResult = "",
-        actualResult = ""
+        result = "",
+        acceptedResult = ""
     )
 //endregion
 
@@ -134,7 +134,7 @@ fun main(){
 //endregion
 }
 
-fun <T> check(testName: String, expectedResult: T, actualResult: T) {
-    if(expectedResult == actualResult) println("Success - $testName")
+fun <T> check(testName: String, result: T, acceptedResult: T) {
+    if(result == acceptedResult) println("Success - $testName")
     else println("Fail - $testName")
 }
