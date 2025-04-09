@@ -2,8 +2,46 @@ package test
 
 
 fun main(){
+
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
+    //region add transaction test cases
+    check(
+        testName = "when amount is less than or equal zero number should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when amount is something else number should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when id of transaction is already associated with another transaction should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when description is invalid like (numbers,special characters) or empty should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when date is invalid should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when transaction type isn't empty should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when category type isn't empty should return false",
+        result = false,
+        acceptedResult = false
+    )
+    //endregion
 
 //endregion
 
