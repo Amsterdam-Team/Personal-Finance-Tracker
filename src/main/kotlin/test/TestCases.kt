@@ -1,7 +1,9 @@
 package test
 
+import models.Transaction
 
-fun main(){
+
+fun main() {
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
@@ -57,7 +59,28 @@ fun main(){
         acceptedResult = false
     )
     //endregion
-
+    //region delete transaction test cases
+    check(
+        testName = "when there is no any transaction added before should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is anything except the numbers should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    //endregion
 //endregion
 
 //region Category Test Cases
@@ -83,10 +106,10 @@ fun main(){
 //endregion
 }
 
-fun check(testName: String, result: Boolean, acceptedResult: Boolean){
-    if (result == acceptedResult){
+fun check(testName: String, result: Boolean, acceptedResult: Boolean) {
+    if (result == acceptedResult) {
         println("Success - $testName")
-    } else{
+    } else {
         println("Failed - $testName")
     }
 }
