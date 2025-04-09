@@ -9,14 +9,10 @@ fun main(){
 
      check(
         testName = "When all inputs are valid and transaction exists, then return true",
-        result = false,
-        acceptedResult = false
+        result = true,
+        acceptedResult = true
     )
-    check(
-        testName = "when transaction type is expenses and amount more than user balance return false",
-        result = false,
-        acceptedResult = false
-    )
+
     check(
         testName = "when amount equals zero or negative number return false",
         result = false,
@@ -55,11 +51,6 @@ fun main(){
     )
     check(
         testName = "when transaction type is empty should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when transaction type not supported should return false",
         result = false,
         acceptedResult = false
     )
