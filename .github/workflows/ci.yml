@@ -23,4 +23,4 @@ jobs:
         run: sudo apt-get install -y kotlin
 
       - name: Run Test Cases
-        run: kotlinc test/TestCases.kt -include-runtime -d testcases.jar && java -jar testcases.jar
+        run: kotlinc src/main/kotlin/test/TestCases.kt -include-runtime -d testcases.jar && java -jar testcases.jar
