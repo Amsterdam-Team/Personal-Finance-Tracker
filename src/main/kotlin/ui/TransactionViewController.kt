@@ -18,6 +18,14 @@ class TransactionViewController (){
         var transMap: MutableMap<String,Any> = mutableMapOf()
 
         for (property in Transaction:: class.memberProperties){
+            if(property.name == "amount"){
+                // add category
+
+
+                transMap["amount"] = checkAmountValue()
+
+                continue
+            }
             if(property.name == "category"){
                 // add category
                 val category = addCategory()
@@ -46,8 +54,9 @@ class TransactionViewController (){
                 }else{
                     do {
                         val dateTimePattern = "dd/MM/yyyy"
-                        var value = UiUtils.getUserInput("enter ${property.name}; enter it in this format day/ month/ year or press enter to indicate today")
+                        val value = UiUtils.getUserInput("enter ${property.name}; enter it in this format day/ month/ year or press enter to indicate today")
                         val date = LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
+
                         // we need to handle exception if occured
                         transMap["date"] = date
 
@@ -81,6 +90,19 @@ class TransactionViewController (){
         // then display the next step if success or failure
         // if success return this catgory
         return category
+
+    }
+
+    fun checkAmountValue():Double {
+        var value: String
+        do {
+            value = UiUtils.getUserInput("enter amount")
+
+        }while (value.toDoubleOrNull() == null)
+        // here we need to add category
+        // then display the next step if success or failure
+        // if success return this catgory
+        return value.toDouble()
 
     }
 }
