@@ -1,6 +1,8 @@
 package models
 
+import java.util.UUID
+
 data class Category(
-    val id:Int,
-    val name:String
+    val id: UUID,
+    val name: String
 )
