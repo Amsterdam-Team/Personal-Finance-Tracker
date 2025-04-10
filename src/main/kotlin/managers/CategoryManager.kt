@@ -5,16 +5,16 @@ import saver.IFileManager
 class CategoryManager(private val fileManager: IFileManager) {
 
 
-    fun checkAddCategory(categoryName:String):Boolean{
+    private fun checkAddCategory(categoryName:String):Boolean{
         return false
     }
-    fun checkDeleteCategory(categoryId:Any?):Boolean{
+    private fun checkDeleteCategory(categoryId:Any?):Boolean{
         return false
     }
-    fun checkViewCategory(categories:List<Category>):Boolean{
+    private fun checkViewCategory(categories:List<Category>):Boolean{
         return false
     }
-    fun checkEditCategory(categoryName:String,categoryId:Any):Boolean{
+    private fun checkEditCategory(categoryName:String,categoryId:Any):Boolean{
         return false
     }
 }
