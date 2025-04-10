@@ -1,6 +1,9 @@
 package reports
 
 import models.*
+import models.reports.CategorySummary
+import models.reports.MonthlySummaryModel
+import models.reports.MonthlySummaryResult
 import java.time.LocalDate
 
 class MonthlySummaryManager {
@@ -9,7 +12,7 @@ class MonthlySummaryManager {
         year: Int,
         month: Int,
         transactions: List<Transaction>
-    ): MonthlySummaryResult{
+    ): MonthlySummaryResult {
         validateDate(year,month)?.let {
             return MonthlySummaryResult.Error(it)
         }

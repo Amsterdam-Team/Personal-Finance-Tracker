@@ -1,4 +1,4 @@
-package models
+package models.reports
 
 sealed class MonthlySummaryResult(){
     data class Error(val errorMessage: String) : MonthlySummaryResult()
