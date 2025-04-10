@@ -6,7 +6,7 @@ import java.time.LocalDate
 class MonthlySummary {
 
 
-    private fun checkDate(year: Int, month: Int):  String {
+    private fun validateDate(year: Int, month: Int):  String? {
         if (month < 1 || month > 12) {
             return "Month must be between 1 and 12"
         }
@@ -17,16 +17,15 @@ class MonthlySummary {
         if (year == currentDate.year && month > currentDate.monthValue) {
             return "Cannot view summary for future months"
         }
-        return SUCCESS
+        return null
     }
     fun getMonthlySummary(
         year: Int,
         month: Int,
         transactions: List<Transaction>
     ): MonthlySummaryResult{
-        val dateResult = checkDate(year,month)
-        if(dateResult != SUCCESS){
-            return MonthlySummaryResult.Error(dateResult)
+        validateDate(year,month)?.let {
+            return MonthlySummaryResult.Error(it)
         }
         val filteredTransactions =  transactions
             .filter {
@@ -65,7 +64,5 @@ class MonthlySummary {
 
 
 
-    companion object{
-        private const val SUCCESS = "Success"
-    }
+
 }
