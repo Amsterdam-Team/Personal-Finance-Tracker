@@ -8,4 +8,6 @@ interface IFileManager {
     fun <T> getAllObjects(inputObject: T): List<T>
 
     fun deleteObjectById(id: UUID)
+
+    fun <T>getObjectById(id: UUID, inputObject: T): T
 }
