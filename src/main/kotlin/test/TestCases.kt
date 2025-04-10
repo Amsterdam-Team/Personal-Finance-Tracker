@@ -1,4 +1,8 @@
 package test
+import managers.checkIsValidDate
+import managers.checkIsValidDescription
+import managers.checkIsValidInputAmount
+import managers.checkIsValidTransactionType
 import models.Category
 
 
@@ -9,52 +13,43 @@ fun main(){
     //region add transaction test cases
     check(
         testName = "when amount is less than or equal zero number should return false",
-        result = false,
+        result = checkIsValidInputAmount("0"),
         acceptedResult = false
     )
     check(
-        testName = "when amount is something else number should return false",
-        result = false,
+        testName = "when amount is letters or special characters should return false",
+        result = checkIsValidInputAmount("a&"),
         acceptedResult = false
     )
     check(
-        testName = "when id of transaction is already associated with another transaction should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when description is invalid like (numbers,special characters) should return false",
-        result = false,
+        testName = "when description is invalid like (containing only numbers,special characters) should return false",
+        result = checkIsValidDescription("1213$%#"),
         acceptedResult = false
     )
     check(
         testName = "when description is empty should return true",
-        result = true,
+        result = checkIsValidDescription(""),
         acceptedResult = true
     )
     check(
         testName = "when date is invalid should return false",
-        result = false,
+        result = checkIsValidDate("12/5/0a25"),
         acceptedResult = false
     )
     check(
         testName = "when date is empty should return false",
-        result = false,
+        result =
+            checkIsValidDate(""),
         acceptedResult = false
     )
     check(
         testName = "when transaction type is empty should return false",
-        result = false,
+        result = checkIsValidTransactionType(""),
         acceptedResult = false
     )
     check(
-        testName = "when category type is empty should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when category is invalid like (numbers,special characters) should return false",
-        result = false,
+        testName = "when transaction type isn't one of these(INCOME,EXPENSE) should return false",
+        result = checkIsValidTransactionType(""),
         acceptedResult = false
     )
     //endregion
