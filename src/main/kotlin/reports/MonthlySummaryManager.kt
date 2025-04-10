@@ -3,7 +3,7 @@ package reports
 import models.*
 import models.reports.CategorySummary
 import models.reports.MonthlySummaryModel
-import models.reports.MonthlySummaryResult
+import utils.ResultStatus
 import java.time.LocalDate
 
 class MonthlySummaryManager {
@@ -12,9 +12,9 @@ class MonthlySummaryManager {
         year: Int,
         month: Int,
         transactions: List<Transaction>
-    ): MonthlySummaryResult {
+    ): ResultStatus<MonthlySummaryModel> {
         validateDate(year,month)?.let {
-            return MonthlySummaryResult.Error(it)
+            return ResultStatus.Error(it)
         }
         val filteredTransactions =  transactions
             .filter {
@@ -22,7 +22,7 @@ class MonthlySummaryManager {
                         it.date.monthValue == month
             }
         if(filteredTransactions.isEmpty()){
-            return MonthlySummaryResult.NoTransactions
+            return ResultStatus.Empty("There Is No Transaction In This Month")
         }
         val categorySummaries = mutableListOf<CategorySummary>()
         filteredTransactions.forEachIndexed { _, transaction ->
@@ -42,7 +42,7 @@ class MonthlySummaryManager {
             }
         }
 
-        return MonthlySummaryResult.Success(
+        return ResultStatus.Success(
             MonthlySummaryModel(
                 categorySummaries = categorySummaries.sortedByDescending { it.totalAmount },
                 transactions = filteredTransactions
