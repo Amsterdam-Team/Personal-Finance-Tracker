@@ -52,18 +52,16 @@ class MonthlySummaryManager {
 
 
 
-    private fun validateDate(year: Int, month: Int):  String? {
-        if (month < 1 || month > 12) {
-            return "Month must be between 1 and 12"
-        }
+    private fun validateDate(year: Int, month: Int): String? {
         val currentDate = LocalDate.now()
-        if (year > currentDate.year) {
-            return "Cannot view summary for future years"
+        return when {
+            month !in 1..12 -> "Month must be between 1 and 12"
+            year < 2000 -> "Year must be 2000 or later"
+            year > currentDate.year -> "Cannot view summary for future years"
+            year == currentDate.year && month > currentDate.monthValue ->
+                "Cannot view summary for future months"
+            else -> null
         }
-        if (year == currentDate.year && month > currentDate.monthValue) {
-            return "Cannot view summary for future months"
-        }
-        return null
     }
 
 
