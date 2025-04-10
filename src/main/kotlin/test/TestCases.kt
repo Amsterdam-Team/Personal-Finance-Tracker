@@ -3,13 +3,13 @@ import managers.checkIsValidDate
 import managers.checkIsValidDescription
 import managers.checkIsValidInputAmount
 import managers.checkIsValidTransactionType
-import models.Category
 
 
 fun main(){
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
+
     //region add transaction test cases
     check(
         testName = "when amount is less than or equal zero number should return false",
@@ -33,13 +33,12 @@ fun main(){
     )
     check(
         testName = "when date is invalid should return false",
-        result = checkIsValidDate("12/5/0a25"),
+        result = checkIsValidDate("1/12/0024"),
         acceptedResult = false
     )
     check(
         testName = "when date is empty should return false",
-        result =
-            checkIsValidDate(""),
+        result = checkIsValidDate(""),
         acceptedResult = false
     )
     check(
@@ -49,7 +48,7 @@ fun main(){
     )
     check(
         testName = "when transaction type isn't one of these(INCOME,EXPENSE) should return false",
-        result = checkIsValidTransactionType(""),
+        result = checkIsValidTransactionType("ahmed"),
         acceptedResult = false
     )
     //endregion
