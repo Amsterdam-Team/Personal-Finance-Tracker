@@ -45,7 +45,7 @@ class MonthlySummary {
                         itemFound = true
                     }
                 }
-                if(itemFound){
+                if(!itemFound){
                     categorySummaries.add(
                         CategorySummary(transaction.category,
                             transaction.type,
