@@ -1,9 +1,10 @@
 package models
 
 import java.time.LocalDate
+import java.util.UUID
 
 data class Transaction(
-    val id :Int,
+    val id :UUID,
     val amount:Double,
     val description:String,
     val date :LocalDate,
