@@ -46,6 +46,9 @@ class FileManagerImpl: IFileManager {
 
     override fun <T> getObjectById(id: UUID, inputObject: T): T {
         val file = File("src/main/kotlin/saver/saveFile.txt")
+        if (!file.exists()){
+            file.createNewFile()
+        }
         val line = file.readLines().first { it.contains(id.toString()) }
         val actualClassName = inputObject.toString().replace("class ", "")
         return Parser.parseObjectFromString(line, actualClassName) as T

@@ -1,6 +1,7 @@
 package managers
 
 import java.time.LocalDate
+import java.util.UUID
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.jvmErasure
@@ -37,6 +38,7 @@ object Parser {
                 }
 
                 expectedType == Int::class -> valueStr?.toIntOrNull()
+                expectedType == UUID::class -> UUID.fromString(valueStr)
                 expectedType == Double::class -> valueStr?.toDoubleOrNull()
                 expectedType == String::class -> valueStr
                 expectedType == LocalDate::class -> LocalDate.parse(valueStr)
