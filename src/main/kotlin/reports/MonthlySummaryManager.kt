@@ -2,7 +2,7 @@ package reports
 
 import models.*
 import models.reports.CategorySummary
-import models.reports.MonthlySummaryModel
+import models.reports.MonthlySummary
 import utils.ResultStatus
 import java.time.LocalDate
 
@@ -12,7 +12,7 @@ class MonthlySummaryManager {
         year: Int,
         month: Int,
         transactions: List<Transaction>
-    ): ResultStatus<MonthlySummaryModel> {
+    ): ResultStatus<MonthlySummary> {
         validateDate(year,month)?.let {
             return ResultStatus.Error(it)
         }
@@ -43,7 +43,7 @@ class MonthlySummaryManager {
         }
 
         return ResultStatus.Success(
-            MonthlySummaryModel(
+            MonthlySummary(
                 categorySummaries = categorySummaries.sortedByDescending { it.totalAmount },
                 transactions = filteredTransactions
             )
