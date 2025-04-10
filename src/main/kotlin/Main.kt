@@ -8,23 +8,14 @@ import java.util.UUID
 
 fun main(args: Array<String>) {
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
+
     val fileManager: FileManagerImpl = FileManagerImpl()
-    val category = Category(5,"food")
-    fileManager.saveObject(Transaction(
-        id = 5,
-        amount = 5.0,
-        description = "",
-        category = category,
-        date = LocalDate.now(),
-        type = TransactionType.INCOME
-    ))
-    fileManager.saveObject(category)
 
-    println(fileManager.getAllObjects(Category::class))
-    println(fileManager.getAllObjects(Transaction::class))
-
+//    println(fileManager.getAllObjects(Category::class.java))
+//    println(fileManager.getAllObjects(Transaction::class.java))
+//
+//    println(fileManager.getObjectById("5360e12b-46c4-428a-961e-9321e00c2c71", Category::class.java))
+//    fileManager.deleteObjectById(UUID.fromString("7723aab6-485d-4f2e-9cf5-60e27e5b21d5"), Transaction::class.java)
 }
 
 

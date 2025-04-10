@@ -1,5 +1,6 @@
 package managers
 
+import java.lang.Exception
 import java.time.LocalDate
 import java.util.UUID
 import kotlin.reflect.KParameter
@@ -14,12 +15,12 @@ object Parser {
 
         val kClass = Class.forName(className).kotlin
 
-        val constructor = kClass.primaryConstructor
+        val constructor = kClass.primaryConstructor?: throw NullPointerException()
         val args = mutableMapOf<KParameter, Any?>()
 
         val parameterPairs = splitTopLevel(inner)
 
-        for (param in constructor?.parameters!!){
+        for (param in constructor.parameters){
             val paramName = param.name
             val expectedType = param.type.jvmErasure
 
