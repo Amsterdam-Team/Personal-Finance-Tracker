@@ -13,38 +13,30 @@ class MonthlySummaryManager {
         month: Int,
         transactions: List<Transaction>
     ): ResultStatus<MonthlySummary> {
-        validateDate(year,month)?.let {
-            return ResultStatus.Error(it)
+        validateDate(year, month)?.let { return ResultStatus.Error(it) }
+
+        val filteredTransactions = transactions.filter {
+            it.date.year == year && it.date.monthValue == month
         }
-        val filteredTransactions =  transactions
-            .filter {
-                it.date.year == year &&
-                        it.date.monthValue == month
-            }
-        if(filteredTransactions.isEmpty()){
-            return ResultStatus.Empty("There Is No Transaction In This Month")
+
+        if (filteredTransactions.isEmpty()) {
+            return ResultStatus.Empty("There are no transactions this month")
         }
-        val categorySummaries = mutableListOf<CategorySummary>()
-        filteredTransactions.forEachIndexed { _, transaction ->
-            var itemFound = false
-            categorySummaries.forEachIndexed {  _,categorySummary ->
-                if(transaction.category.id==categorySummary.category.id){
-                    categorySummary.totalAmount+=transaction.amount
-                    itemFound = true
-                }
-            }
-            if(!itemFound){
-                categorySummaries.add(
-                    CategorySummary(transaction.category,
-                        transaction.type,
-                        transaction.amount)
+
+        val categorySummaries = filteredTransactions
+            .groupBy { it.category to it.type }
+            .map { (categoryType, transactions) ->
+                CategorySummary(
+                    category = categoryType.first,
+                    type = categoryType.second,
+                    totalAmount = transactions.sumOf { it.amount }
                 )
             }
-        }
+            .sortedByDescending { it.totalAmount }
 
         return ResultStatus.Success(
             MonthlySummary(
-                categorySummaries = categorySummaries.sortedByDescending { it.totalAmount },
+                categorySummaries = categorySummaries,
                 transactions = filteredTransactions
             )
         )
