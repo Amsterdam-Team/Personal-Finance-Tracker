@@ -1,6 +1,8 @@
+package managers
 import models.Category
+import saver.IFileManager
 
-class CategoryManager {
+class CategoryManager(private val fileManager: IFileManager) {
 
 
     fun checkAddCategory(categoryName:String):Boolean{
