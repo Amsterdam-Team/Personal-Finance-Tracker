@@ -53,6 +53,33 @@ fun main(){
     )
     //endregion
 
+    // region delete transaction test cases
+    check(
+        testName = "when there is no any transaction added before should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "When entered id does not match the id schema should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
+        acceptedResult = true
+    )
+    // end region
     // region view transaction test cases
     check(
         testName = "when transaction id is not found then should return null",
