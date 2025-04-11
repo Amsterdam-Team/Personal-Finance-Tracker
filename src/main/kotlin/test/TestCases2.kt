@@ -2,9 +2,16 @@ package test
 
 import managers.CategoryManager
 import managers.TransactionManager
+import models.Category
+import models.Transaction
+import models.TransactionType
+import models.reports.CategorySummary
+import models.reports.MonthlySummary
+import reports.MonthlySummaryManager
 import saver.FileManagerImpl
 import utils.ResultStatus
 import utils.Validator
+import java.time.LocalDate
 import java.util.*
 
 fun main(){
@@ -84,6 +91,93 @@ fun main(){
     )
 
     //endregion
+    val carCategoryId = UUID.fromString("11111111-1111-1111-1111-111111111111")
+    val salaryCategoryId = UUID.fromString("22222222-2222-2222-2222-222222222222")
+    val rentCategoryId = UUID.fromString("33333333-3333-3333-3333-333333333333")
+
+    val transaction1Id = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+    val transaction2Id = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb")
+    val transaction3Id = UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc")
+
+    val carCategory = Category(id = carCategoryId, name = "car")
+    val salaryCategory = Category(id = salaryCategoryId, name = "salary")
+    val rentCategory = Category(id = rentCategoryId, name = "rent")
+
+    val testTransactions = listOf(
+        Transaction(id = transaction1Id, 5000.0, description = "Salary", date = LocalDate.of(2023,6,1), category = salaryCategory,type = TransactionType.INCOME),
+        Transaction(id = transaction2Id, 200.0, description = "fuel", date =  LocalDate.of(2023,6,5), category = carCategory, type =  TransactionType.EXPENSE),
+        Transaction(id = transaction3Id, 1000.0, description = "Rent", date = LocalDate.of(2023,5,1), category = rentCategory, type =  TransactionType.EXPENSE)
+    )
+    fileManager.getObjectById<Transaction>(transaction1Id.toString(), Transaction::class.java)
+        ?.let {
+            fileManager.saveObject(carCategory)
+            fileManager.saveObject(salaryCategory)
+            fileManager.saveObject(rentCategory)
+            fileManager.saveObject(testTransactions[0])
+            fileManager.saveObject(testTransactions[1])
+            fileManager.saveObject(testTransactions[2])
+        }
+
+
+    check(
+        "when no transactions in month should return Empty",
+        MonthlySummaryManager(fileManager).getMonthlySummary(2023, 7),
+        ResultStatus.Empty("There are no transactions this month")
+    )
+
+    check(
+        "when year is after now should return Error",
+        MonthlySummaryManager(fileManager).getMonthlySummary(LocalDate.now().year + 1, 6),
+        ResultStatus.Error("Cannot view summary for future years")
+    )
+
+    check(
+        "when month is after current month in current year should return Error",
+        MonthlySummaryManager(fileManager).getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1),
+        ResultStatus.Error("Cannot view summary for future months")
+    )
+
+    check(
+        "when month number is invalid should return Error",
+        MonthlySummaryManager(fileManager).getMonthlySummary(2023, 13),
+        ResultStatus.Error("Month must be between 1 and 12")
+    )
+
+    check(
+        "when year number is invalid should return Error",
+        MonthlySummaryManager(fileManager).getMonthlySummary(1999, 6),
+        ResultStatus.Error("Year must be 2000 or later")
+    )
+
+    check(
+        "when valid month with transactions should return correct summary",
+        MonthlySummaryManager(fileManager).getMonthlySummary(2023, 6),
+        ResultStatus.Success(
+            MonthlySummary(
+                categorySummaries = listOf(
+                    CategorySummary(
+                        category = salaryCategory,
+                        type = TransactionType.INCOME,
+                        totalAmount = 5000.0
+                    ),
+                    CategorySummary(
+                        category = carCategory,
+                        type = TransactionType.EXPENSE,
+                        totalAmount = 200.0
+                    )
+                ),
+                transactions = listOf(
+                    testTransactions[0],
+                    testTransactions[1]
+                )
+            )
+        )
+    )
+    //region Monthly summary test cases
+
+
+
+//endregion
 
 
 }
