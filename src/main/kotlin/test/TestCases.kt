@@ -87,6 +87,7 @@ fun main(){
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = ResultStatus.Error("Transaction not found")
     )
+    // enter valid id please
     check(
         testName = "when entered id is founded should return true",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
