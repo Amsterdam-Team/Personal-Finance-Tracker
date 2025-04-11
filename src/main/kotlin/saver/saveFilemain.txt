@@ -1,1 +1,4 @@
 Category(id=b6205b22-f8ee-4c35-a844-154802e83aab, name=food)
+Transaction(id=ccef6968-ba99-4795-b11c-08f527dbba15, amount=10000.0, description=some fruits, date=2025-04-11, category=Category(id=b942df90-863a-40da-af36-a557386cc6a4, name=food), type=EXPENSE)
+Transaction(id=80236a80-eacb-4f20-b03a-de4b54629f39, amount=40000.0, description=bought apple pencil, date=2025-04-04, category=Category(id=755044f9-42dc-462e-8322-cfce8c70feb9, name=electronic), type=EXPENSE)
+Transaction(id=db01af50-7569-4915-a77c-8cc4d096a6d7, amount=700000.0, description=get my salary, date=2025-04-11, category=Category(id=776f49d4-be4e-4f56-a8ce-6091e5646369, name=salary), type=INCOME)

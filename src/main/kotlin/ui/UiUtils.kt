@@ -15,6 +15,9 @@ class UiUtils {
             val transMap: MutableMap<String,Any> = mutableMapOf()
 
             for (property in Transaction:: class.memberProperties){
+                if (property.name =="id"){
+                    continue
+                }
                 if(property.name == "amount"){
                     // add category
 

@@ -44,7 +44,16 @@ class TransactionManager(private val fileManager: IFileManager) {
 
     }
 
-
+    fun getAllTransaction(): ResultStatus<List<Transaction>>{
+        val transactions = fileManager.getAllObjects(Transaction::class.java)
+        return ResultStatus.Success(transactions)
+    }
+//    fun getTransactionById(id: UUID): ResultStatus<Transaction>{
+//        val transactions = fileManager.getAllObjects(Transaction::class.java)
+//        transactions.
+//
+//        return ResultStatus.Success(transactions)
+//    }
 
     fun editTransaction(
         transaction: Transaction

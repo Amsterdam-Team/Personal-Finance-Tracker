@@ -12,8 +12,21 @@ import java.util.*
 class TransactionViewController (val transactionManager: TransactionManager){
     fun addTransaction() {
         var transaction = UiUtils.getTransactionFromUser()
+        val result = transactionManager.addTransaction(transaction)
+        when(result){
+            is ResultStatus.Success -> {
+                UiUtils.displayMessage(result.data)
 
-        UiUtils.displayMessage("Transaction added")
+            }
+            is ResultStatus.Error -> {
+                UiUtils.displayMessage(result.errorMessage)
+
+            }
+            is ResultStatus.Empty -> {
+                UiUtils.displayMessage(result.message)
+            }
+            else -> Unit
+        }
         println(transaction)
     }
 
@@ -34,8 +47,11 @@ class TransactionViewController (val transactionManager: TransactionManager){
         // get old transaction based on the id
         // edit the old transaction with this new transaction
 
-        val newEditedTransaction = UiUtils.getTransactionEditFromUser(t)
-        val result = transactionManager.editTransaction(newEditedTransaction)
+//        val newEditedTransaction = UiUtils.getTransactionEditFromUser(t)
+        var newEditiedTransaction = UiUtils.getTransactionFromUser()
+
+
+        val result = transactionManager.editTransaction(newEditiedTransaction)
         when(result){
             is ResultStatus.Success -> {
                 UiUtils.displayMessage(result.data)
@@ -81,10 +97,16 @@ class TransactionViewController (val transactionManager: TransactionManager){
             )
 
         )
-
-        for (trn in trnasList){
-            UiUtils.displayMessage("${trn.id}: ${trn.description}")
+        var result = transactionManager.getAllTransaction()
+        when(result){
+            is ResultStatus.Success -> {
+                for (trn in result.data){
+                    UiUtils.displayMessage("${trn.id}: ${trn.description}")
+                }
+            }
+            else -> Unit
         }
+
 
     }
 
