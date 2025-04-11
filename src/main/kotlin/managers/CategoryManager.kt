@@ -1,7 +1,9 @@
 package managers
 import models.Category
+import models.Transaction
 import saver.IFileManager
 import utils.ResultStatus
+
 
 class CategoryManager(private val fileManager: IFileManager) {
 

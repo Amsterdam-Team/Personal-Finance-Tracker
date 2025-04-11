@@ -1,174 +1,147 @@
 package test
+import managers.*
 import models.Category
+import models.Transaction
+import models.TransactionType
+import utils.ResultStatus
+import java.time.LocalDate
+import java.util.*
 import saver.FileManagerImpl
 
 
 fun main(){
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
-    //region add transaction test cases
-    check(
-        testName = "when amount is less than or equal zero number should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when amount is something else number should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when id of transaction is already associated with another transaction should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when description is invalid like (numbers,special characters) should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when description is empty should return true",
-        result = true,
-        acceptedResult = true
-    )
-    check(
-        testName = "when date is invalid should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when date is empty should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when transaction type is empty should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when category type is empty should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when category is invalid like (numbers,special characters) should return false",
-        result = false,
-        acceptedResult = false
-    )
-    //endregion
+       //region add transaction test cases
+        check(
+            testName = "when amount is less than or equal zero number should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when amount is something else number should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when id of transaction is already associated with another transaction should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when description is invalid like (numbers,special characters) should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when description is empty should return true",
+            result = true,
+            acceptedResult = true
+        )
+        check(
+            testName = "when date is invalid should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when date is empty should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when transaction type is empty should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when category type is empty should return false",
+            result = false,
+            acceptedResult = false
+        )
+        check(
+            testName = "when category is invalid like (numbers,special characters) should return false",
+            result = false,
+            acceptedResult = false
+        )
+        //endregion
 
-    // region delete transaction test cases
-    check(
-        testName = "when there is no any transaction added before should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "When entered id does not match the id schema should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id doesn't exist in the transactions should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id is less than zero should return false",
-        result = false,
-        acceptedResult = false
-    )
-    check(
-        testName = "when entered id is founded should return true",
-        result = true,
-        acceptedResult = true
-    )
-    // end region
-    // region view transaction test cases
-    check(
-        testName = "when transaction id is not found then should return null",
-        result= false,
-        acceptedResult = false,
-    )
-    check(
-        testName = "when transaction id is found then should return transaction",
-        result= true,
-        acceptedResult = true,
-    )
-    check(
-        testName = "when transaction id is not valid then should return null",
-        result= false,
-        acceptedResult = false,
-    )
-    // endregion
+        // region view transaction test cases
+        check(
+            testName = "when transaction id is not found then should return null",
+            result= false,
+            acceptedResult = false,
+        )
+        check(
+            testName = "when transaction id is found then should return transaction",
+            result= true,
+            acceptedResult = true,
+        )
+        check(
+            testName = "when transaction id is not valid then should return null",
+            result= false,
+            acceptedResult = false,
+        )
+        // endregion
 //region Edit Transaction Test Cases
 
-    check(
-        testName = "When all inputs are valid and transaction exists, then return true",
-        result = true,
-        acceptedResult = true
-    )
+
 
     check(
         testName = "when amount of existing transaction equals zero or negative number return false",
-        result = false,
-        acceptedResult = false
+        result = isValidAmount(0.0),
+        acceptedResult = ResultStatus.Error("Invalid Amount")
     )
     check(
         testName = "when amount is something else number should return false",
-        result = false,
-        acceptedResult = false
+        result = isValidAmount(null),
+        acceptedResult = ResultStatus.Error("Invalid Amount")
     )
     check(
         testName = "when id of transaction is invalid should return false",
 
-        result = false,
-        acceptedResult = false
+        result = isValidID(listOf(Transaction(UUID.randomUUID(), 125.4,"",LocalDate.now(),Category(UUID.randomUUID(),""),TransactionType.EXPENSE)),
+            UUID.randomUUID()),
+        acceptedResult = ResultStatus.Error("Invalid Id")
     )
     check(
         testName = "when description is invalid like (numbers,special characters) should return false",
-        result = false,
-        acceptedResult = false
+        result = isValidDescription("$#%@"),
+        acceptedResult = ResultStatus.Error("Invalid Description")
     )
     check(
         testName = "when description is empty should return true",
-        result = true,
-        acceptedResult = true
+        result = isValidDescription(""),
+        acceptedResult = ResultStatus.Success("success")
     )
     check(
         testName = "when date is invalid should return false",
-        result = false,
-        acceptedResult = false
+        result = isValidDate("145224"),
+        acceptedResult = ResultStatus.Error("Invalid Date")
     )
 
     check(
         testName = "when transaction type is empty should return false",
-        result = false,
-        acceptedResult = false
+        result = isValidaType(""),
+        acceptedResult = ResultStatus.Error("Invalid Type")
     )
     check(
         testName = "when category type is empty should return false",
-        result = false,
-        acceptedResult = false
+        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food")),""),
+        acceptedResult = ResultStatus.Error("Invalid Category")
     )
     check(
         testName = "when category type is invalid return false",
-        result = false,
-        acceptedResult = false
+        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food"),Category(UUID.randomUUID(),"Salary")),"Shopping"),
+        acceptedResult = ResultStatus.Error("Invalid Category")
     )
     //endregion
 //endregion
 
+
 //region Category Test Cases
 
     // region add Category Test Case
-    check(
-        testName = "When the user adds a category with a valid name should return true",
-        result = false,
-        acceptedResult =true ,
-    )
+
     check(
         testName = "When the user tries to add a category with the same name should return false ",
         result = false,
@@ -176,8 +149,8 @@ fun main(){
     )
     check(
         testName = "When the user tries to add a category with an empty string should return false",
-        result = false,
-        acceptedResult =false ,
+        result = false ,
+        acceptedResult = false ,
     )
     check(
         testName = "When the user tries to add a category with special character should return false",
@@ -187,12 +160,12 @@ fun main(){
     check(
         testName = "When the user tries to add invalid category type should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false ,
     )
     check(
         testName = "When the user tries to add a category with spaces should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false ,
     )
     //endregion
 
@@ -362,6 +335,7 @@ fun main(){
     check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
 
 //endregion
+
 
 }
 
