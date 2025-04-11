@@ -25,18 +25,16 @@ class CategoryManager(private val fileManager: IFileManager) {
         }
 
         val category = fileManager.getObjectById(id, Category::class.java)
-        if (category == null) {
-            return ResultStatus.Error("Category not found!")
-        }
+            ?: return ResultStatus.Error("Category not found.")
 
         return null
     }
 
-    fun editCategory(category: Category):ResultStatus<Boolean>{
-        fileManager.getObjectById(category.id.toString(),Category::class.java)
+    fun editCategory(category: Category): ResultStatus<Boolean> {
+        fileManager.getObjectById(category.id.toString(), Category::class.java)
             ?: return ResultStatus.Error("This Id Not Found In File")
 
-        fileManager.deleteObjectById(category.id,Category::class.java)
+        fileManager.deleteObjectById(category.id, Category::class.java)
         fileManager.saveObject(category)
 
         return ResultStatus.Success(true)
