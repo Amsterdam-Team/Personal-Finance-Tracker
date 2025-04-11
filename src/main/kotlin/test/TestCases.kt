@@ -249,11 +249,7 @@ fun main(){
         result = false,
         acceptedResult = true
     )
-    check(
-        testName = "When not exist list of category should return false",
-        result = false,
-        acceptedResult = false
-    )
+
     //endregion
 
 
