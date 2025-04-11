@@ -48,9 +48,10 @@ class TransactionViewController (val transactionManager: TransactionManager){
         // edit the old transaction with this new transaction
 
 //        val newEditedTransaction = UiUtils.getTransactionEditFromUser(t)
-        var newEditiedTransaction = UiUtils.getTransactionFromUser()
+        var newEditiedTransaction = UiUtils.getTransactionFromUser(id)
 
 
+        println("---->${newEditiedTransaction}")
         val result = transactionManager.editTransaction(newEditiedTransaction)
         when(result){
             is ResultStatus.Success -> {
