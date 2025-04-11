@@ -5,10 +5,9 @@ import java.util.UUID
 interface IFileManager {
     fun <T> saveObject(inputObject: T)
 
-    fun <T> getAllObjects(inputObject: T): List<T>
+    fun <T> getAllObjects(inputObject: Class<T>): List<T>
 
-    fun deleteObjectById(id: UUID)
+    fun <T>deleteObjectById(id: UUID, inputObject: Class<T>)
 
-    fun <T> getObjectById(inputObject: Class<T>, id: Int): T
-
+    fun <T>getObjectById(id: String, inputObject: Class<T>): T?
 }
