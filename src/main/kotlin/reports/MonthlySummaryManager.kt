@@ -7,7 +7,7 @@ import saver.IFileManager
 import utils.ResultStatus
 import java.time.LocalDate
 
-class MonthlySummaryManager (private val fileManger: IFileManager){
+class MonthlySummaryManager (private val fileManager: IFileManager){
 
     fun getMonthlySummary(
         year: Int,
@@ -58,7 +58,7 @@ class MonthlySummaryManager (private val fileManger: IFileManager){
 
 
 private fun getAllTransactions(): List<Transaction>{
-    return fileManger.getAllObjects(Transaction::class) as List<Transaction>
+    return fileManager.getAllObjects(Transaction::class.java) as List<Transaction>
 }
 
 
