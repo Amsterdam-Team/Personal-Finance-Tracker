@@ -1,20 +1,17 @@
 package managers
 import models.Category
 import saver.IFileManager
+import utils.ResultStatus
 
 class CategoryManager(private val fileManager: IFileManager) {
 
+    fun editCategory(category: Category):ResultStatus<Boolean>{
+        fileManager.getObjectById(category.id.toString(),Category::class.java)
+            ?: return ResultStatus.Error("This Id Not Found In File")
 
-    private fun checkAddCategory(categoryName:String):Boolean{
-        return false
-    }
-    private fun checkDeleteCategory(categoryId:Any?):Boolean{
-        return false
-    }
-    private fun checkViewCategory(categories:List<Category>):Boolean{
-        return false
-    }
-    private fun checkEditCategory(categoryName:String,categoryId:Any):Boolean{
-        return false
+        fileManager.deleteObjectById(category.id,Category::class.java)
+        fileManager.saveObject(category)
+
+        return ResultStatus.Success(true)
     }
 }
