@@ -1,7 +1,9 @@
 import models.TransactionType
+import utils.ResultStatus
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.util.*
 
 object Validators {
     fun isValidInputAmount(amount:String):Boolean{
@@ -44,4 +46,22 @@ object Validators {
             true
         }
     }
+    fun isValidID(id: UUID): ResultStatus<String> {
+
+
+
+        if (id.toString().contains(" ") || id.toString().isBlank())
+            return ResultStatus.Error("Invalid Id")
+        return ResultStatus.Success("success")
+    }
+    fun isValidCategory (category: String): ResultStatus<String> {
+        if (category.isBlank())
+            return ResultStatus.Error("Invalid Category")
+        return ResultStatus.Success("success")
+
+    }
+
+
+
+
 }
