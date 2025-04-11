@@ -67,7 +67,7 @@ object Validator {
         if (regex.matches(input) || input.isBlank())
             return ResultStatus.Success("success")
         return ResultStatus.Error("Invalid Description")
-
+    }
     fun isValidCategoryName(categories: List<Category>, name: String): ResultStatus<String> {
         if (name.isBlank() || name.contains(' '))
             return ResultStatus.Error("Invalid Name")
@@ -80,4 +80,5 @@ object Validator {
         }
         return ResultStatus.Error("Invalid Name")
     }
+
 }

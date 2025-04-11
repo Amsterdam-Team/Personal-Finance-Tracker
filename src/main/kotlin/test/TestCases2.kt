@@ -5,12 +5,6 @@ import managers.TransactionManager
 import models.Category
 import models.Transaction
 import models.TransactionType
-import saver.FileManagerImpl
-import utils.ResultStatus
-import utils.Validator
-import java.time.LocalDate
-import models.Transaction
-import models.TransactionType
 import models.reports.CategorySummary
 import models.reports.MonthlySummary
 import reports.MonthlySummaryManager
@@ -152,8 +146,13 @@ fun main() {
 
     check(
         testName = "when amount of existing transaction equals zero or negative number return false",
-        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
-            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        result = transactionManager.editTransaction(
+            Transaction(
+                UUID.randomUUID(), 0.0, "Shopping", LocalDate.now(), Category(
+                    UUID.randomUUID(), ""
+                ), TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("Invalid Data")
     )
     check(
@@ -163,14 +162,24 @@ fun main() {
     )
     check(
         testName = "when id of transaction is invalid should return false",
-        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
-            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        result = transactionManager.editTransaction(
+            Transaction(
+                UUID.randomUUID(), 0.0, "Shopping", LocalDate.now(), Category(
+                    UUID.randomUUID(), ""
+                ), TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("Invalid Data")
     )
     check(
         testName = "when description is invalid like (numbers,special characters) should return false",
-        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
-            UUID.randomUUID(),"$%#&$"),TransactionType.EXPENSE)),
+        result = transactionManager.editTransaction(
+            Transaction(
+                UUID.randomUUID(), 0.0, "Shopping", LocalDate.now(), Category(
+                    UUID.randomUUID(), "$%#&$"
+                ), TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("Invalid Data")
     )
 
@@ -181,15 +190,23 @@ fun main() {
     )
     check(
         testName = "when category type is empty should return false",
-        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0," ", LocalDate.now(),Category(
-            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        result = transactionManager.editTransaction(
+            Transaction(
+                UUID.randomUUID(), 0.0, " ", LocalDate.now(), Category(
+                    UUID.randomUUID(), ""
+                ), TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("Invalid Data")
     )
     check(
         testName = "when category type is invalid return false",
-        result =transactionManager.editTransaction(
-            Transaction(UUID.randomUUID(),0.0,"Rent", LocalDate.now(), Category(
-            UUID.randomUUID(),""), TransactionType.EXPENSE)
+        result = transactionManager.editTransaction(
+            Transaction(
+                UUID.randomUUID(), 0.0, "Rent", LocalDate.now(), Category(
+                    UUID.randomUUID(), ""
+                ), TransactionType.EXPENSE
+            )
         ),
         acceptedResult = ResultStatus.Error("Invalid Data")
     )
@@ -267,35 +284,35 @@ fun main() {
     check(
 
         testName = "When the user tries to add a category with the same name should return false ",
-        result = categoryManager.addCategory(UUID.randomUUID(),"Salary"),
-        acceptedResult = ResultStatus.Error("Invalid Data") ,
+        result = categoryManager.addCategory(UUID.randomUUID(), "Salary"),
+        acceptedResult = ResultStatus.Error("Invalid Data"),
     )
     check(
         testName = "When the user tries to add a category with an empty string should return false",
-        result = categoryManager.addCategory(UUID.randomUUID(),""),
-        acceptedResult =ResultStatus.Error("Invalid Data") ,
+        result = categoryManager.addCategory(UUID.randomUUID(), ""),
+        acceptedResult = ResultStatus.Error("Invalid Data"),
     )
     check(
         testName = "When the user tries to add a category with special character should return false",
-        result = categoryManager.addCategory(UUID.randomUUID(),"$#%#"),
-        acceptedResult =ResultStatus.Error("Invalid Data") ,
+        result = categoryManager.addCategory(UUID.randomUUID(), "$#%#"),
+        acceptedResult = ResultStatus.Error("Invalid Data"),
     )
     check(
         testName = "When the user tries to add invalid category type should return false",
-        result = categoryManager.addCategory(UUID.randomUUID(),"123"),
-        acceptedResult =ResultStatus.Error("Invalid Data") ,
+        result = categoryManager.addCategory(UUID.randomUUID(), "123"),
+        acceptedResult = ResultStatus.Error("Invalid Data"),
     )
     check(
         testName = "When the user tries to add a category with spaces should return false",
-        result = categoryManager.addCategory(UUID.randomUUID(),"Salary "),
-        acceptedResult = ResultStatus.Error("Invalid Data") ,
+        result = categoryManager.addCategory(UUID.randomUUID(), "Salary "),
+        acceptedResult = ResultStatus.Error("Invalid Data"),
     )
 
     //endregion
 
     //endregion
     //region Monthly summary test cases
-clearSaveFile()
+    clearSaveFile()
     val carCategoryId = UUID.fromString("11111111-1111-1111-1111-111111111111")
     val salaryCategoryId = UUID.fromString("22222222-2222-2222-2222-222222222222")
     val rentCategoryId = UUID.fromString("33333333-3333-3333-3333-333333333333")
@@ -335,12 +352,12 @@ clearSaveFile()
         )
     )
 
-            fileManager.saveObject(carCategory)
-            fileManager.saveObject(salaryCategory)
-            fileManager.saveObject(rentCategory)
-            fileManager.saveObject(testTransactions[0])
-            fileManager.saveObject(testTransactions[1])
-            fileManager.saveObject(testTransactions[2])
+    fileManager.saveObject(carCategory)
+    fileManager.saveObject(salaryCategory)
+    fileManager.saveObject(rentCategory)
+    fileManager.saveObject(testTransactions[0])
+    fileManager.saveObject(testTransactions[1])
+    fileManager.saveObject(testTransactions[2])
 
 
 
@@ -399,7 +416,7 @@ clearSaveFile()
         )
     )
 
-clearSaveFile()
+    clearSaveFile()
 //endregion
 
 }
