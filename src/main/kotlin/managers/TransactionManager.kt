@@ -94,7 +94,6 @@ private fun validateUUID(input: String): ResultStatus<UUID> {
                 isValidID(transaction.id),
                 isValidInput(transaction.description),
                 isValidTransactionType(transaction.type.toString()),
-                isValidDate(transaction.date.toString()),
                 isValidInput( transaction.category.name),
                 isValidInputAmount(transaction.amount.toString())
             ).all { it == ResultStatus.Success("success") }
