@@ -7,6 +7,7 @@ import models.Transaction
 import saver.IFileManager
 import utils.ResultStatus
 import utils.Validator.isValidDate
+import utils.Validator.isValidDescription
 import utils.Validator.isValidID
 import utils.Validator.isValidInput
 import utils.Validator.isValidInputAmount
@@ -40,7 +41,7 @@ class TransactionManager(private val fileManager: IFileManager) {
             is ResultStatus.Empty -> ResultStatus.Error(validationResult.message)
         }
     }
-*/
+
 
     fun viewAllTransactions(): ResultStatus<List<Transaction>> {
         val transactions = fileManager.getAllObjects(Transaction::class.java)
@@ -93,7 +94,7 @@ private fun validateUUID(input: String): ResultStatus<UUID> {
 
         if (listOf(
                 isValidID(transaction.id),
-                isValidInput(transaction.description),
+                isValidDescription(transaction.description),
                 isValidTransactionType(transaction.type.toString()),
                 isValidInput( transaction.category.name),
                 isValidInputAmount(transaction.amount.toString())

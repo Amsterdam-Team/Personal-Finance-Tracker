@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException
 import java.util.*
 
 object Validator {
+
     fun isValidCategoryID(categories: List<Category>, id: UUID): ResultStatus<String> {
         if (id.toString().isBlank() || id.toString().contains(" "))
             return ResultStatus.Error("Invalid Id")
@@ -59,5 +60,11 @@ object Validator {
         if (id.toString().contains(" ") || id.toString().isBlank())
             return ResultStatus.Error("Invalid Id")
         return ResultStatus.Success("success")
+    }
+    fun isValidDescription(input: String): ResultStatus<String> {
+        val regex = Regex("^(?=.*[a-zA-Z]).*$")
+        if (regex.matches(input) || input.isBlank())
+            return ResultStatus.Success("success")
+        return ResultStatus.Error("Invalid Description")
     }
 }
