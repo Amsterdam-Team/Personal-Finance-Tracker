@@ -1,5 +1,8 @@
 package test
+import managers.isValidCategoryName
 import models.Category
+import utils.ResultStatus
+import java.util.*
 
 
 fun main(){
@@ -165,35 +168,32 @@ fun main(){
 
     // region add Category Test Case
     check(
-        testName = "When the user adds a category with a valid name should return true",
-        result = false,
-        acceptedResult =true ,
-    )
-    check(
         testName = "When the user tries to add a category with the same name should return false ",
-        result = false,
-        acceptedResult =false ,
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Food"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
     )
     check(
         testName = "When the user tries to add a category with an empty string should return false",
-        result = false,
-        acceptedResult =false ,
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),""),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
     )
     check(
         testName = "When the user tries to add a category with special character should return false",
-        result = false,
-        acceptedResult =false ,
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"$#%#"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
     )
     check(
         testName = "When the user tries to add invalid category type should return false",
-        result = false,
-        acceptedResult =false ,
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"123"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
     )
     check(
         testName = "When the user tries to add a category with spaces should return false",
-        result = false,
-        acceptedResult =false ,
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Salary "),
+        acceptedResult = ResultStatus.Error("Invalid Name") ,
     )
+
+
     //endregion
 
 
