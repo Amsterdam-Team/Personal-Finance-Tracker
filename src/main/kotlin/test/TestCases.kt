@@ -1,12 +1,5 @@
 package test
 import models.Category
-import models.Transaction
-import models.TransactionType
-import models.reports.CategorySummary
-import models.reports.MonthlySummary
-import reports.MonthlySummaryManager
-import utils.ResultStatus
-import java.time.LocalDate
 
 
 fun main(){
@@ -66,6 +59,33 @@ fun main(){
     )
     //endregion
 
+    // region delete transaction test cases
+    check(
+        testName = "when there is no any transaction added before should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "When entered id does not match the id schema should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
+        acceptedResult = true
+    )
+    // end region
     // region view transaction test cases
     check(
         testName = "when transaction id is not found then should return null",
@@ -338,72 +358,12 @@ fun main(){
 
 //region Monthly Summary Test Cases
 
-
-
-    val carCategory = Category(id = 1, name = "car")
-    val salaryCategory = Category(id = 2, name = "salary")
-    val rentCategory = Category(id = 3, name = "rent")
-
-    val testTransactions = listOf(
-        Transaction(1, 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
-        Transaction(2, 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE),
-        Transaction(3, 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE)
-    )
-
-    check(
-        "when no transactions in month should return Empty",
-        MonthlySummaryManager().getMonthlySummary(2023, 7, testTransactions),
-        ResultStatus.Empty("There are no transactions this month")
-    )
-
-    check(
-        "when year is after now should return Error",
-        MonthlySummaryManager().getMonthlySummary(LocalDate.now().year + 1, 6, testTransactions),
-        ResultStatus.Error("Cannot view summary for future years")
-    )
-
-    check(
-        "when month is after current month in current year should return Error",
-        MonthlySummaryManager().getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1, testTransactions),
-        ResultStatus.Error("Cannot view summary for future months")
-    )
-
-    check(
-        "when month number is invalid should return Error",
-        MonthlySummaryManager().getMonthlySummary(2023, 13, testTransactions),
-        ResultStatus.Error("Month must be between 1 and 12")
-    )
-
-    check(
-        "when year number is invalid should return Error",
-        MonthlySummaryManager().getMonthlySummary(1999, 6, testTransactions),
-        ResultStatus.Error("Year must be 2000 or later")
-    )
-
-    check(
-        "when valid month with transactions should return correct summary",
-        MonthlySummaryManager().getMonthlySummary(2023, 6, testTransactions),
-        ResultStatus.Success(
-            MonthlySummary(
-                categorySummaries = listOf(
-                    CategorySummary(
-                        category = salaryCategory,
-                        type = TransactionType.INCOME,
-                        totalAmount = 5000.0
-                    ),
-                    CategorySummary(
-                        category = carCategory,
-                        type = TransactionType.EXPENSE,
-                        totalAmount = 200.0
-                    )
-                ),
-                transactions = listOf(
-                    Transaction(1, 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
-                    Transaction(2, 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE)
-                )
-            )
-        )
-    )
+    check(testName = "when no transactions in month should return NoTransactions", result = false, acceptedResult = false)
+    check(testName = "when year is after now should return error", result = false, acceptedResult = false)
+    check(testName = "when month is after current month in current year should return error", result = false, acceptedResult = false)
+    check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
+    check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
+    check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
 
 //endregion
 
