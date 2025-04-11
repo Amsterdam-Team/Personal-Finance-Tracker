@@ -7,11 +7,11 @@ import java.util.UUID
 
 class TransactionManager(private val fileManager: IFileManager) {
 
-    fun deleteTransaction(uuid: UUID): Any {
+    fun deleteTransaction(uuid: UUID): ResultStatus<String> {
          fileManager.getObjectById(uuid.toString(), Transaction::class.java) ?: return ResultStatus.Error(
              "Transaction not found"
          )
         fileManager.deleteObjectById(uuid, Transaction::class.java)
-        return ResultStatus.Success(true)
+        return ResultStatus.Success("true")
     }
 }
