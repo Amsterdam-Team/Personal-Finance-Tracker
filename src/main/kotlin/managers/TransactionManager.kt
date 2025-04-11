@@ -1,18 +1,17 @@
 package managers
 
-import com.sun.jdi.IntegerType
+
 import models.Category
 import models.Transaction
 import models.TransactionType
-import models.TransactionViewResult
 import saver.IFileManager
 import utils.ResultStatus
-import java.text.DateFormat
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.*
-import java.util.zip.DataFormatException
+
 
 class TransactionManager(private val fileManager: IFileManager) {
 
