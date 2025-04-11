@@ -1,6 +1,6 @@
 package test
 
-import managers.isValidCategoryName
+import Validators.isValidCategoryName
 import models.Category
 import utils.ResultStatus
 import managers.*
@@ -9,6 +9,8 @@ import models.TransactionType
 import java.time.LocalDate
 import java.util.*
 import saver.FileManagerImpl
+import utils.Validator.isValidInputAmount
+import utils.Validator.isValidTransactionType
 
 
 fun main(){
@@ -118,8 +120,7 @@ fun main(){
     check(
         testName = "when id of transaction is invalid should return false",
 
-        result = isValidID(listOf(Transaction(UUID.randomUUID(), 125.4,"",LocalDate.now(),Category(UUID.randomUUID(),""),TransactionType.EXPENSE)),
-            UUID.randomUUID()),
+        result = isValidID(UUID.randomUUID()),
         acceptedResult = ResultStatus.Error("Invalid Id")
     )
     check(
@@ -145,12 +146,12 @@ fun main(){
     )
     check(
         testName = "when category type is empty should return false",
-        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food")),""),
+        result = isValidCategory(""),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     check(
         testName = "when category type is invalid return false",
-        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food"),Category(UUID.randomUUID(),"Salary")),"Shopping"),
+        result = isValidCategory("Shopping"),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     //endregion

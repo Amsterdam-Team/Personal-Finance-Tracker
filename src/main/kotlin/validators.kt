@@ -1,7 +1,10 @@
+import models.Category
 import models.TransactionType
+import utils.ResultStatus
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.util.*
 
 object Validators {
     fun isValidInputAmount(amount:String):Boolean{
@@ -43,5 +46,28 @@ object Validators {
         }else{
             true
         }
+    }
+    fun isValidCategoryID(categories: List<Category>, id: UUID): ResultStatus<String> {
+        if (id.toString().isBlank() || id.toString().contains(" "))
+            return ResultStatus.Error("Invalid Id")
+        else {
+            val category = categories.find { it.id == id }
+            if (category == null)
+                return ResultStatus.Success("success")
+        }
+        return ResultStatus.Error("Id Already Exists")
+    }
+
+    fun isValidCategoryName(categories: List<Category>, name: String): ResultStatus<String> {
+        if (name.isBlank() || name.contains(' '))
+            return ResultStatus.Error("Invalid Name")
+        else {
+            if (name.matches(Regex("^[a-zA-Z ]+$"))) {
+                val category = categories.find { it.name == name }
+                if (category == null)
+                    return ResultStatus.Success("success")
+            }
+        }
+        return ResultStatus.Error("Invalid Name")
     }
 }
