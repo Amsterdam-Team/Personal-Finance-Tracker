@@ -6,11 +6,16 @@ import utils.ResultStatus
 import managers.*
 import models.Transaction
 import models.TransactionType
+import models.reports.CategorySummary
+import models.reports.MonthlySummary
+import reports.MonthlySummaryManager
 import java.time.LocalDate
 import java.util.*
 import saver.FileManagerImpl
+
 import utils.Validator.isValidInputAmount
 import utils.Validator.isValidTransactionType
+import saver.IFileManager
 
 
 fun main(){
@@ -187,7 +192,7 @@ fun main(){
         result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Salary "),
         acceptedResult = ResultStatus.Error("Invalid Name") ,
     )
-    
+
 
 
     //endregion
@@ -346,25 +351,53 @@ fun main(){
 
 
 //region Monthly Summary Test Cases
-
+val fileMgr: IFileManager = FileManagerImpl()
+    val carCategory = Category(UUID.randomUUID(), name = "car")
+    val salaryCategory = Category(UUID.randomUUID(), name = "salary")
+    val rentCategory = Category(UUID.randomUUID(), name = "rent")
+    fileMgr.saveObject(carCategory)
+    fileMgr.saveObject(salaryCategory)
+    fileMgr.saveObject(rentCategory)
+    val testTransactions = listOf(
+        Transaction(UUID.randomUUID(), 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
+        Transaction(UUID.randomUUID(), 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE),
+        Transaction(UUID.randomUUID(), 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE)
+    )
+    fileMgr.saveObject(Transaction(UUID.randomUUID(), 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME))
+    fileMgr.saveObject(Transaction(UUID.randomUUID(), 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE))
+    fileMgr.saveObject( Transaction(UUID.randomUUID(), 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE))
     check(
         testName = "when no transactions in month should return NoTransactions",
-        result = false,
-        acceptedResult = false
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(2023, 7),
+        acceptedResult = ResultStatus.Empty("There are no transactions this month")
     )
-    check(testName = "when year is after now should return error", result = false, acceptedResult = false)
+
     check(
-        testName = "when month is after current month in current year should return error",
-        result = false,
-        acceptedResult = false
+        testName = "when year is after now should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(LocalDate.now().year + 1, 6),
+        acceptedResult = ResultStatus.Error("Cannot view summary for future years")
     )
-    check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
+
     check(
-        testName = "when valid month with transactions should return correct summary",
-        result = false,
-        acceptedResult = false
+        testName = "when month is after current month in current year should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1),
+        acceptedResult = ResultStatus.Error("Cannot view summary for future months")
     )
+
+    check(
+        testName = "when month number is invalid should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(2023, 13),
+        acceptedResult = ResultStatus.Error("Month must be between 1 and 12")
+    )
+
+    check(
+        testName = "when year number is invalid should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(1999, 6),
+        acceptedResult = ResultStatus.Error("Year must be 2000 or later")
+    )
+
+
+
 
 //endregion
 
