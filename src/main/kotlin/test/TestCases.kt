@@ -88,6 +88,75 @@ fun main(){
         acceptedResult = false
     )
     //endregion
+
+    // region delete transaction test cases
+    check(
+        testName = "when there is no any transaction added before should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "When entered id does not match the id schema should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
+        acceptedResult = true
+    )
+    // end region
+    // region view transaction test cases
+    check(
+        testName = "when transaction id is not found then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    check(
+        testName = "when transaction id is found then should return transaction",
+        result= true,
+        acceptedResult = true,
+    )
+    check(
+        testName = "when transaction id is not valid then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    //    check(
+//        testName = "when transaction id is empty then should return error",
+//        result = viewTransactionById("   "),
+//        acceptedResult = TransactionViewResult.Error("Input is empty or contains only spaces."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is not a valid UUID then should return error",
+//        result = viewTransactionById("123-not-a-uuid"),
+//        acceptedResult = TransactionViewResult.Error("You must enter a valid UUID."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is valid UUID but not found then should return error",
+//        result = viewTransactionById("550e8400-e29b-41d4-a716-446655440000"), // assuming it's not in file
+//        acceptedResult = TransactionViewResult.Error("Transaction not found."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is valid UUID and exists then should return success",
+//        result = viewTransactionById(transaction.id.toString()),
+//        acceptedResult = TransactionViewResult.Success(transaction),
+//    )
+    // endregion
+
         // region view transaction test cases
         check(
             testName = "when transaction id is not found then should return null",
@@ -105,6 +174,7 @@ fun main(){
             acceptedResult = false,
         )
         // endregion
+
 //region Edit Transaction Test Cases
 
 
