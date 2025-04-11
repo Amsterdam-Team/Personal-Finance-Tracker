@@ -1,53 +1,53 @@
 package managers
 
+
+import models.Category
 import models.Transaction
+
 import saver.IFileManager
 import utils.ResultStatus
-import java.util.UUID
-
-import Validators.isValidCategory
-import Validators.isValidDate
-import Validators.isValidDescription
-import Validators.isValidID
-import Validators.isValidInputAmount
-import Validators.isValidTransactionType
-import com.sun.jdi.IntegerType
-import models.Category
-import java.text.DateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
+import utils.Validator.isValidDate
+import utils.Validator.isValidID
+import utils.Validator.isValidInput
+import utils.Validator.isValidInputAmount
+import utils.Validator.isValidTransactionType
 import java.util.*
-import java.util.zip.DataFormatException
 
 class TransactionManager(private val fileManager: IFileManager) {
-/*
-    fun viewTransactionById(inputId: String): TransactionViewResult {
+    fun deleteTransaction(uuid: UUID): ResultStatus<String> {
+        fileManager.getObjectById(uuid.toString(), Transaction::class.java) ?: return ResultStatus.Error(
+            "Transaction not found"
+        )
+        fileManager.deleteObjectById(uuid, Transaction::class.java)
+        return ResultStatus.Success("true")
+    }
+    fun viewTransactionById(inputId: String): ResultStatus<Transaction> {
         return when (val validationResult = validateUUID(inputId)) {
             is ResultStatus.Success -> {
                 val uuid = validationResult.data
                 try {
                     val transaction = fileManager.getObjectById(uuid.toString(), Transaction::class.java)
                     if (transaction != null) {
-                        TransactionViewResult.Success(transaction)
+                        ResultStatus.Success(transaction)
                     } else {
-                        TransactionViewResult.Error("Transaction not found.")
+                        ResultStatus.Error("Transaction not found.")
                     }
                 } catch (e: Exception) {
-                    TransactionViewResult.Error("Error reading the file: ${e.message}")
+                    ResultStatus.Error("Error reading the file: ${e.message}")
                 }
             }
-            is ResultStatus.Error -> TransactionViewResult.Error(validationResult.errorMessage)
-            is ResultStatus.Empty -> TransactionViewResult.Error(validationResult.message)
+            is ResultStatus.Error -> ResultStatus.Error(validationResult.errorMessage)
+            is ResultStatus.Empty -> ResultStatus.Error(validationResult.message)
         }
     }
 */
 
-    fun viewAllTransactions(): List<Pair<String, String>> {
+    fun viewAllTransactions(): ResultStatus<List<Transaction>> {
         val transactions = fileManager.getAllObjects(Transaction::class.java)
-        return transactions.map {
-            Pair(it.id.toString(), it.description)
+        if (transactions.isEmpty()){
+            return ResultStatus.Empty("No Transactions yet.")
         }
+        return ResultStatus.Success(transactions)
     }
 
 
@@ -66,27 +66,18 @@ private fun validateUUID(input: String): ResultStatus<UUID> {
 }
 
     fun addTransaction(transaction: Transaction): ResultStatus<String> {
-
-        return when {
-            !isValidInputAmount(transaction.amount.toString())
-                -> ResultStatus.Error("please enter a valid amount number")
-
-            !isValidDescription(transaction.description)
-                -> ResultStatus.Error("please enter a valid description")
-
-            !isValidDate(transaction.date.toString())
-                -> ResultStatus.Error("please enter a valid date with that format : yyyy-MM-dd")
-
-            !isValidTransactionType(transaction.type.toString())
-                -> ResultStatus.Error("please enter one of these types only (INCOME,EXPENSE)")
-
-            else -> {
+        var availableCategories = fileManager.getAllObjects(Category::class.java).filter {
+            transaction.category.name == it.name
+        }
+        if (availableCategories.isEmpty()) {
+            fileManager.saveObject(transaction.category)
+        }
                 fileManager.saveObject(transaction)
                 return ResultStatus.Success("Successfully added ur transaction with id : ${transaction.id}")
             }
-        }
 
-    }
+
+
 
 
 
@@ -102,10 +93,10 @@ private fun validateUUID(input: String): ResultStatus<UUID> {
 
         if (listOf(
                 isValidID(transaction.id),
-                isValidDescription(transaction.description),
+                isValidInput(transaction.description),
                 isValidTransactionType(transaction.type.toString()),
                 isValidDate(transaction.date.toString()),
-                isValidCategory( transaction.category.name),
+                isValidInput( transaction.category.name),
                 isValidInputAmount(transaction.amount.toString())
             ).all { it == ResultStatus.Success("success") }
         ) {

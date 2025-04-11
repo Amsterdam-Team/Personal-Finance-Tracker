@@ -1,0 +1,9 @@
+Transaction(id=ccef6968-ba99-4795-b11c-08f527dbba15, amount=10000.0, description=some fruits, date=2025-04-11, category=Category(id=b942df90-863a-40da-af36-a557386cc6a4, name=food), type=EXPENSE)
+Transaction(id=80236a80-eacb-4f20-b03a-de4b54629f39, amount=40000.0, description=bought apple pencil, date=2025-04-04, category=Category(id=755044f9-42dc-462e-8322-cfce8c70feb9, name=electronic), type=EXPENSE)
+Transaction(id=db01af50-7569-4915-a77c-8cc4d096a6d7, amount=700000.0, description=get my salary, date=2025-04-11, category=Category(id=776f49d4-be4e-4f56-a8ce-6091e5646369, name=salary), type=INCOME)
+Transaction(id=a312ff04-44a7-43f2-824b-8c7273da2c16, amount=20000.0, description=bought some vegetables, date=2025-04-11, category=Category(id=70e52e0c-6679-41aa-86c1-968e987aa279, name=food), type=EXPENSE)
+Category(id=e3919524-ea58-4549-86e4-f67373c4defa, name=fruits)
+
+Transaction(id=8fd7dfbb-4242-43b6-98e5-d7407fbfa4b9, amount=10000.0, description=bought one fish, date=2025-04-11, category=Category(id=044a1f57-cdcf-4bb3-b633-bc5475313ba7, name=fish), type=EXPENSE)
+
+Category(id=f663a0b2-326e-4593-8e70-06192893f8dc, name=gold)

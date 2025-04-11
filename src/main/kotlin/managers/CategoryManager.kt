@@ -1,10 +1,10 @@
 package managers
 
-import Validators.isValidCategoryID
-import Validators.isValidCategoryName
 import models.Category
 import saver.IFileManager
 import utils.ResultStatus
+import utils.Validator.isValidCategoryID
+import utils.Validator.isValidInput
 import java.util.UUID
 
 class CategoryManager(private val fileManager: IFileManager) {
@@ -31,6 +31,16 @@ class CategoryManager(private val fileManager: IFileManager) {
 
         return ResultStatus.Success(true)
     }
+//    fun getCategory(category: Category): ResultStatus<Boolean> {
+//        fileManager.getObjectById(category.id.toString(), Category::class.java)
+//            ?: return ResultStatus.Error("This Id Not Found In File")
+//
+//        fileManager.deleteObjectById(category.id, Category::class.java)
+//        fileManager.saveObject(category)
+//
+//        return ResultStatus.Success(true)
+//    }
+
 
     fun deleteCategoryById(id: String): ResultStatus<String> {
         val validationResult = validateDeleteCategory(id)
@@ -59,7 +69,7 @@ class CategoryManager(private val fileManager: IFileManager) {
         val categories = fileManager.getAllObjects(Category::class.java)
         if (listOf(
                 isValidCategoryID(categories, id),
-                isValidCategoryName(categories, name)
+                isValidInput(name)
             ).all { it == ResultStatus.Success("success") }
         ) {
             fileManager.saveObject(Category(id, name))
