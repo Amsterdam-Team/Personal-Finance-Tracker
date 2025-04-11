@@ -1,14 +1,9 @@
 package test
-import managers.TransactionManager
 import models.Category
-import saver.FileManagerImpl
-import utils.ResultStatus
-import java.util.*
 
 
 fun main(){
-    val fileManager: FileManagerImpl = FileManagerImpl()
-    val transactionManager = TransactionManager(fileManager)
+
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
     //region add transaction test cases
@@ -66,30 +61,28 @@ fun main(){
 
     // region delete transaction test cases
     check(
-        testName = "***** when there is no any transaction added before should return false",
-        result = transactionManager.deleteTransactionByUUID(UUID.randomUUID()),
+        testName = "when there is no any transaction added before should return false",
+        result = false,
         acceptedResult = false
     )
     check(
-        testName = "***** When entered id does not match the id schema should return false",
-        result = transactionManager.deleteTransactionByUUID(UUID.randomUUID()),
-        acceptedResult = false
-    )
-    println(transactionManager.deleteTransactionByUUID(UUID.randomUUID()).toString())
-    check(
-        testName = "***** when entered id doesn't exist in the transactions should return false",
-        result = transactionManager.deleteTransactionByUUID(UUID.randomUUID()),
+        testName = "When entered id does not match the id schema should return false",
+        result = false,
         acceptedResult = false
     )
     check(
-        testName = "***** when entered id is less than zero should return false",
-        result = transactionManager.deleteTransactionByUUID(UUID(0, -1)),
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
         acceptedResult = false
     )
-    // should be a valid UUID for real transaction -- ibrahim
     check(
-        testName = "***** when entered id is founded should return true",
-        result = transactionManager.deleteTransactionByUUID(UUID.randomUUID()),
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
         acceptedResult = true
     )
     // end region

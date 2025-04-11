@@ -6,8 +6,11 @@ import java.io.ObjectInput
 import java.util.*
 
 class FileManagerImpl: IFileManager {
+
+    private val stackTrace = Thread.currentThread().stackTrace
+    private val caller = if (stackTrace.firstOrNull { it.methodName == "main" }?.className == "MainKt") "main" else "test"
     override fun <T> saveObject(inputObject: T) {
-        val file = File("src/main/kotlin/saver/saveFile.txt")
+        val file = File("src/main/kotlin/saver/saveFile$caller.txt")
         if (!file.exists()){
             file.createNewFile()
         }
@@ -18,7 +21,8 @@ class FileManagerImpl: IFileManager {
 
     override fun <T> getAllObjects(inputObject: Class<T>): List<T> {
         val returnList = mutableListOf<T>()
-        val file = File("src/main/kotlin/saver/saveFile.txt")
+
+        val file = File("src/main/kotlin/saver/saveFile$caller.txt")
         if (!file.exists()){
             file.createNewFile()
         }
@@ -34,7 +38,8 @@ class FileManagerImpl: IFileManager {
     }
 
     override fun <T>deleteObjectById(id: UUID, inputObject: Class<T>) {
-        val file = File("src/main/kotlin/saver/saveFile.txt")
+
+        val file = File("src/main/kotlin/saver/saveFile$caller.txt")
         if (!file.exists()){
             file.createNewFile()
         }
@@ -44,7 +49,8 @@ class FileManagerImpl: IFileManager {
     }
 
     override fun <T> getObjectById(id: String, inputObject: Class<T>): T? {
-        val file = File("src/main/kotlin/saver/saveFile.txt")
+
+        val file = File("src/main/kotlin/saver/saveFile$caller.txt")
          var returnObject: T? = null
         if (!file.exists()){
             file.createNewFile()
