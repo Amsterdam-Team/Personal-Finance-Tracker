@@ -3,19 +3,21 @@ package reports
 import models.BalanceReport
 import models.Transaction
 import models.TransactionType
+import saver.IFileManager
 import utils.ResultStatus
 import java.time.LocalDate
 
-class BalanceReportManager() {
+class BalanceReportManager(private val fileManager: IFileManager) {
     fun getBalanceReport(
         startDate: LocalDate,
         endDate: LocalDate = LocalDate.now(),
-        transactions: List<Transaction>
     ): ResultStatus<BalanceReport> {
+        val transactions = fileManager.getAllObjects(Transaction::class.java)
+
         return when {
             endDate.isAfter(LocalDate.now()) -> ResultStatus.Error(ERROR_END_DATE_AFTER_TODAY)
             startDate.isAfter(endDate) -> ResultStatus.Error(ERROR_START_DATE_AFTER_END_DATE)
-            transactions.isEmpty() -> ResultStatus.Empty(EMPTY_REPORT_BALANCE)
+            transactions.isEmpty() -> ResultStatus.Empty(EMPTY_TRANSACTION_LIST)
             else -> {
                 val transactionsInTheRange = filterTransactionsByDateRange(
                     transactions = transactions, startDate = startDate, endDate = endDate
@@ -47,6 +49,8 @@ class BalanceReportManager() {
             "The end date cannot be after the current date. Please provide a valid end date."
         private const val ERROR_START_DATE_AFTER_END_DATE =
             "The start date cannot be after the end date. Please adjust your date range."
+        private const val EMPTY_TRANSACTION_LIST =
+            "No transactions available yet. Start by adding a new transaction to see it here."
         private const val EMPTY_REPORT_BALANCE =
             "No transactions found in the selected date range. Please check the dates or add transactions."
     }
