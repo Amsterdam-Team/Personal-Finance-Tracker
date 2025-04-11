@@ -3,19 +3,19 @@ package reports
 import models.*
 import models.reports.CategorySummary
 import models.reports.MonthlySummary
+import saver.IFileManager
 import utils.ResultStatus
 import java.time.LocalDate
 
-class MonthlySummaryManager {
+class MonthlySummaryManager (private val fileManger: IFileManager){
 
     fun getMonthlySummary(
         year: Int,
-        month: Int,
-        transactions: List<Transaction>
+        month: Int
     ): ResultStatus<MonthlySummary> {
-        validateDate(year, month)?.let { return ResultStatus.Error(it) }
+        validateDateAndMonth(year, month)?.let { return ResultStatus.Error(it) }
 
-        val filteredTransactions = transactions.filter {
+        val filteredTransactions = getAllTransactions().filter {
             it.date.year == year && it.date.monthValue == month
         }
 
@@ -44,7 +44,7 @@ class MonthlySummaryManager {
 
 
 
-    private fun validateDate(year: Int, month: Int): String? {
+    private fun validateDateAndMonth(year: Int, month: Int): String? {
         val currentDate = LocalDate.now()
         return when {
             month !in 1..12 -> "Month must be between 1 and 12"
@@ -57,7 +57,9 @@ class MonthlySummaryManager {
     }
 
 
-
+private fun getAllTransactions(): List<Transaction>{
+    return fileManger.getAllObjects(Transaction::class) as List<Transaction>
+}
 
 
 }
