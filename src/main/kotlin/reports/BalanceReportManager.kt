@@ -1,26 +1,13 @@
 package reports
 
 import models.BalanceReport
-import models.Category
 import models.Transaction
 import models.TransactionType
 import saver.IFileManager
 import utils.ResultStatus
 import java.time.LocalDate
-import java.util.*
 
 class BalanceReportManager(private val fileManager: IFileManager) {
-
-    init {
-        fileManager.saveObject(Transaction(
-            id = UUID.randomUUID(),
-            amount = 60.639,
-            description = "Tanja",
-            date = LocalDate.of(2020,1,1),
-            category = Category(id = UUID.randomUUID(), name = "Paola"),
-            type = TransactionType.EXPENSE
-        ))
-    }
 
     fun getBalanceReport(
         startDate: LocalDate,
