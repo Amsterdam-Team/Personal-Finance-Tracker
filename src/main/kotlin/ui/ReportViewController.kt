@@ -12,15 +12,21 @@ class ReportViewController(private val monthlySummaryManager : MonthlySummaryMan
         val result = monthlySummaryManager.getMonthlySummary(year, month)
         UiUtils.displayMessage("monthly summary for this date ${month}/${year} is .......")
         if (result is ResultStatus.Success){
+            UiUtils.displayMessage("----------------")
             UiUtils.displayMessage("All categories: ")
+            UiUtils.displayMessage("----------------")
+
 
             result.data.categorySummaries.forEach {
-                UiUtils.displayMessage("${it.category.name}: ${it.type} --> ${it.totalAmount}")
+                UiUtils.displayMessage("> ${it.category.name}: ${it.type} --> ${it.totalAmount}")
             }
+            UiUtils.displayMessage("----------------")
             UiUtils.displayMessage("All Transactions: ")
+            UiUtils.displayMessage("----------------")
+
 
             result.data.transactions.forEach {
-                UiUtils.displayMessage("${it.description} : ${it.type} --> ${it.amount}")
+                UiUtils.displayMessage("> ${it.description} : ${it.type} --> ${it.amount}")
             }
         }else if (result is ResultStatus.Error){
             UiUtils.displayMessage(result.errorMessage)

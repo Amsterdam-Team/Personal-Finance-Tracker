@@ -118,7 +118,7 @@ class ApplicationView (val transController :TransactionViewController, val repor
         }
     }
     private fun handleBalanceReport(){
-        val startDate = UiUtils.getDateFromUser(msg = "enter a start date to get the balance report")
+        val startDate = UiUtils.getDateFromUser(msg = "enter a start date to get the balance report; enter it in this format year-month-day ")
         reportController.getBalanceReport(startDate)
         reshowMajorCommands()
 

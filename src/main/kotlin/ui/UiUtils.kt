@@ -35,10 +35,19 @@ class UiUtils {
                 }
 
                 if(property.name == "type"){
-                    val value = getUserInput("enter ${property.name}; choose one please: income, expense ")
+                    var type: String
+                    while (true){
+                        type = getUserInput("enter transaction type: income or expense only ")
+
+                        if (type == "expense" || type == "income"){
+                            transMap["type"] = type.lowercase()
+                            break
+
+                        }
+                    }
                     when{
-                        value.lowercase() == TransactionType.INCOME.toString().lowercase() -> transMap["type"] = value.lowercase()
-                        value.lowercase() == TransactionType.EXPENSE.toString().lowercase() -> transMap["type"] = value.lowercase()
+                        type.lowercase() == TransactionType.INCOME.toString().lowercase() -> transMap["type"] = type.lowercase()
+                        type.lowercase() == TransactionType.EXPENSE.toString().lowercase() -> transMap["type"] = type.lowercase()
 
                     }
                     continue
@@ -90,7 +99,17 @@ class UiUtils {
                    continue
                }
                 if (property.name == "type"){
-                    val type = getUserInput("enter a new transaction type ", oldTrans.type.toString())
+                    var type: String
+                    while (true){
+                        type = getUserInput("enter a new transaction type ", oldTrans.type.toString() )
+
+                        if (type == "expense" || type == "income"){
+                            transMap["type"] = type.lowercase()
+                            break
+
+                        }
+                    }
+
                     transMap["type"] = type.lowercase()
                     continue
                 }
@@ -172,48 +191,36 @@ class UiUtils {
             if (oldDate != null){
                 println("the old date is $oldDate, ")
             }
-            var date: LocalDate? = LocalDate.now()
+            val date: LocalDate? = LocalDate.now()
             var value = getUserInput(message =  msg)
             if (value == "now"){
                 return date!!
 
-            }else{
-                println(value)
-                do {
+            }else {
+                while (true) {
 
-                    value = getUserInput(message =  msg)
-
-                     val result = Validator.isValidDate(value)
-                    when(result){
-                        is ResultStatus.Success ->{
+                    when (val result = Validator.isValidDate(value)) {
+                        is ResultStatus.Success -> {
                             return result.data
                         }
-                        is ResultStatus.Error ->{
-                            UiUtils.displayMessage(result.errorMessage)
-                            date= null
+
+                        is ResultStatus.Error -> {
+                            displayMessage(result.errorMessage)
                         }
+
                         else -> Unit
 
                     }
-//                         try {
-//                         LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
-//                     } catch (e :Exception){
-//                         println("invalid date format; use this format (day/moth/year)")
-//                         null
-//                     }
-                    // we need to handle exception if not occurred return date
-
-
-                }while (value.split("/").size != 3 || date==null)
-
+                    value = getUserInput(message =  msg)
+                }
             }
-            return date!!
-        }
+         }
+//
 
          fun getCategoryUuid(msg: String) :UUID{
             var categoryUuid: UUID?
             do {
-                var categoryId = getUserInput(msg)
+                val categoryId = getUserInput(msg)
                 categoryUuid = try {
                     UUID.fromString(categoryId)
                 } catch (e: Exception) {
@@ -229,7 +236,7 @@ class UiUtils {
         fun getUserUUID(): UUID{
             var transUuid: UUID?
             do {
-                var trnasId = UiUtils.getUserInput("enter the transaction id ")
+                val trnasId = getUserInput("enter the transaction id ")
                 transUuid = try {
                     UUID.fromString(trnasId)
                 } catch (e: Exception) {

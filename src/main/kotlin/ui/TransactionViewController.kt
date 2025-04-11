@@ -27,7 +27,6 @@ class TransactionViewController (val transactionManager: TransactionManager){
             }
             else -> Unit
         }
-        println(transaction)
     }
 
 
@@ -48,10 +47,23 @@ class TransactionViewController (val transactionManager: TransactionManager){
         // edit the old transaction with this new transaction
 
 //        val newEditedTransaction = UiUtils.getTransactionEditFromUser(t)
-        var newEditiedTransaction = UiUtils.getTransactionFromUser(id)
+        val res = transactionManager.viewTransactionById(id.toString())
+        var newEditiedTransaction: Transaction
+        when (res) {
+            is ResultStatus.Success -> {
+                newEditiedTransaction = UiUtils.getTransactionEditFromUser(res.data)
+            }
+            is ResultStatus.Error -> {
+                UiUtils.displayMessage(res.errorMessage)
+                return
+            }
+            is ResultStatus.Empty -> {
+                UiUtils.displayMessage(res.message)
+                return
+            }
 
+        }
 
-        println("---->${newEditiedTransaction}")
         val result = transactionManager.editTransaction(newEditiedTransaction)
         when(result){
             is ResultStatus.Success -> {
