@@ -7,5 +7,3 @@ Category(id=e3919524-ea58-4549-86e4-f67373c4defa, name=fruits)
 Transaction(id=8fd7dfbb-4242-43b6-98e5-d7407fbfa4b9, amount=10000.0, description=bought one fish, date=2025-04-11, category=Category(id=044a1f57-cdcf-4bb3-b633-bc5475313ba7, name=fish), type=EXPENSE)
 
 Category(id=f663a0b2-326e-4593-8e70-06192893f8dc, name=gold)
-
-Transaction(id=ad68e875-d835-4a4c-b030-e398f7af32dc, amount=10000.0, description=bough ring, date=2025-04-11, category=Category(id=f663a0b2-326e-4593-8e70-06192893f8dc, name=gold), type=EXPENSE)
