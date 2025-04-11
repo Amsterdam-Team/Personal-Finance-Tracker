@@ -67,6 +67,7 @@ class ApplicationView (val transController :TransactionViewController, val repor
                 reshowMajorCommands()
             }
             3 -> {
+                categoryController.viewAllCategories()
                 val categoryUuid =UiUtils.getCategoryUuid("enter the category id you want to delete ")
                 categoryController.deleteCategory(categoryUuid)
                 reshowMajorCommands()

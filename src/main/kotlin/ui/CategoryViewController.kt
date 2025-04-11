@@ -25,9 +25,34 @@ class CategoryViewController(val categoryManager: CategoryManager) {
         }
     }
     fun deleteCategory(id :UUID) {
-        println("delete category ${id}")
+        viewAllCategories()
+        val result = categoryManager.deleteCategoryById(id.toString())
+        when(result){
+            is ResultStatus.Success -> {
+                UiUtils.displayMessage("${id} deleted successfully")
+            }
+            is ResultStatus.Error -> {
+                UiUtils.displayMessage(result.errorMessage)
+            }
+            is ResultStatus.Empty -> {
+                UiUtils.displayMessage(result.message)
+            }
+        }
     }
     fun viewAllCategories() {
-        println("showing all categories")
+        val result = categoryManager.viewCategories()
+        when (result) {
+            is ResultStatus.Success -> {
+                for (category in result.data) {
+                    UiUtils.displayMessage("${category.id}: ${category.name}")
+                }
+            }
+            is ResultStatus.Error -> {
+                UiUtils.displayMessage(result.errorMessage)
+            }
+            is ResultStatus.Empty -> {
+                UiUtils.displayMessage(result.message)
+            }
+        }
     }
 }

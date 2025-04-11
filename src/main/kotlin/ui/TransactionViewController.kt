@@ -67,7 +67,6 @@ class TransactionViewController (val transactionManager: TransactionManager){
     }
     fun deleteTransaction(id :UUID){
         println("deleting this transaction")
-        return
     }
     fun getAllTransactions(){
         val trnasList = listOf<Transaction>(
