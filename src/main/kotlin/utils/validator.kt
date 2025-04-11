@@ -36,12 +36,11 @@ object Validator {
         }
         return ResultStatus.Success("success")
     }
-    fun isValidDate(inputDate:String):ResultStatus<String>{
-        if (inputDate.isBlank()) ResultStatus.Empty("please enter the date")
+    fun isValidDate(inputDate:String):ResultStatus<LocalDate>{
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return try {
             val date = LocalDate.parse(inputDate, formatter)
-        ResultStatus.Success("success")
+        ResultStatus.Success(date)
         } catch (e: DateTimeParseException) {
             ResultStatus.Error("please enter a valid date with that format : yyyy-MM-dd")
         }
