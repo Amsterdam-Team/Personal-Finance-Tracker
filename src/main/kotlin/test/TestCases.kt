@@ -1,30 +1,36 @@
 package test
+import Validators.checkIsValidDate
+import Validators.checkIsValidDescription
+import Validators.checkIsValidInputAmount
+import Validators.checkIsValidTransactionType
 import managers.*
 import models.Category
 import models.Transaction
 import models.TransactionType
 import saver.FileManagerImpl
 import utils.ResultStatus
-import java.text.DateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
-import javax.swing.text.html.HTML.Tag.DD
 
 
 fun main(){
 
-    val transaction:TransactionManager = TransactionManager(fileManager = FileManagerImpl())
-    val type:TransactionType=TransactionType.EXPENSE
-    val id:UUID =UUID.randomUUID()
-    val category:Category = Category(id,"")
-    val date = LocalDate.now()
-    println(date.toString())
-    val transactionData:Transaction = Transaction(id,1.0,"",date ,category,type )
-    val check = transaction.addTransaction(transactionData)
-    println(check)
+    //region mock data for testing add function validity
+    val transactionManager = TransactionManager(fileManager = FileManagerImpl())
+    check(
+        testName = "when amount is less than or equal zero number should return false",
+        result = transactionManager.addTransaction(Transaction(id = UUID.randomUUID(),-1.0,"", date = LocalDate.now(),
+            Category(id = UUID.randomUUID(),""), type = TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("please enter a valid amount number")
+    )
+    check(
+        testName = "when description is invalid like (containing only numbers,special characters) should return false",
+        result = transactionManager.addTransaction(Transaction(id = UUID.randomUUID(),1.0,"11#$44", date = LocalDate.now(),
+            Category(id = UUID.randomUUID(),""), type = TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("please enter a valid description")
+    )
 
+    //end region
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
