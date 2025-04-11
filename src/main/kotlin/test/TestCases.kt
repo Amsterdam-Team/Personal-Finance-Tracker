@@ -281,32 +281,32 @@ fun main(){
     check(
         testName = "When the user tries to edit a category with an empty string and valid id should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = "", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
-        acceptedResult = ResultStatus.Error("Enter Valid Name"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     check(
         testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = "@@", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az-5545454"),
-        acceptedResult = ResultStatus.Error("Enter Valid Name and ID"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     check(
         testName = "When the user tries to add invalid category type and valid id should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = "4565465", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
-        acceptedResult = ResultStatus.Error("Enter Valid Name"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     check(
         testName = "When the user tries to add a category with spaces and valid id should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = " Food ", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
-        acceptedResult = ResultStatus.Error("Enter Valid Name"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     check(
         testName = "When the user tries to add a valid category name and negative id should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "-5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
-        acceptedResult = ResultStatus.Error("Enter Valid ID"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     check(
         testName = "When the user tries to add a valid category name and invalid type of id should return false",
         result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "kah;khf"),
-        acceptedResult = ResultStatus.Error("Enter Valid ID"),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
     )
     //endregion
 
