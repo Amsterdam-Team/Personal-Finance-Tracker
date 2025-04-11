@@ -3,6 +3,7 @@ import managers.TransactionManager
 import models.Category
 import saver.FileManagerImpl
 import saver.IFileManager
+import utils.ResultStatus
 import java.util.*
 
 
@@ -69,27 +70,27 @@ fun main(){
     check(
         testName = "when there is no any transaction added before should return false",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
-        acceptedResult = false
+        acceptedResult = ResultStatus.Error("Transaction not found")
     )
     check(
         testName = "When entered id does not match the id schema should return false",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
-        acceptedResult = false
+        acceptedResult = ResultStatus.Error("Transaction not found")
     )
     check(
         testName = "when entered id doesn't exist in the transactions should return false",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
-        acceptedResult = false
+        acceptedResult = ResultStatus.Error("Transaction not found")
     )
     check(
         testName = "when entered id is less than zero should return false",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
-        acceptedResult = false
+        acceptedResult = ResultStatus.Error("Transaction not found")
     )
     check(
         testName = "when entered id is founded should return true",
         result = transactionManager.deleteTransaction(UUID.randomUUID()),
-        acceptedResult = true
+        acceptedResult = ResultStatus.Success(true)
     )
     // end region
     // region view transaction test cases
