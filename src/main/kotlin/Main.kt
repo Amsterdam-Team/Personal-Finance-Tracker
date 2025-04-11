@@ -3,6 +3,8 @@ import models.Category
 import models.Transaction
 import models.TransactionType
 import saver.FileManagerImpl
+import ui.ApplicationView
+import ui.TransactionViewController
 import java.time.LocalDate
 import java.util.UUID
 
@@ -10,6 +12,9 @@ fun main(args: Array<String>) {
 
 
     val fileManager: FileManagerImpl = FileManagerImpl()
+    val transactionViewController = TransactionViewController()
+    val applicationView = ApplicationView(transactionViewController)
+    applicationView.start()
 
 //    println(fileManager.getAllObjects(Category::class.java))
 //    println(fileManager.getAllObjects(Transaction::class.java))

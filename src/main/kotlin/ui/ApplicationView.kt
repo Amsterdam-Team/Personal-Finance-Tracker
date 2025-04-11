@@ -1,5 +1,7 @@
 package ui
 
+import java.util.*
+
 class ApplicationView (val transController :TransactionViewController) {
     fun start(){
         var name = " "
@@ -21,6 +23,8 @@ class ApplicationView (val transController :TransactionViewController) {
         println("Available commands:")
         println("T -> transaction commands")
         println("C -> Category commands")
+        println("MS -> Monthly Summary")
+        println("BR -> Balance Report")
         println("Exit -> exit")
 
 
@@ -40,6 +44,11 @@ class ApplicationView (val transController :TransactionViewController) {
      fun handleUserCommand(command:String){
         when(command.lowercase()){
             "T".lowercase() -> handleTransactionCommand()
+            "exit".lowercase() -> {
+                println("see you soon, bye")
+                return
+            }
+
         }
     }
     fun handleTransactionCommand(){
@@ -47,6 +56,20 @@ class ApplicationView (val transController :TransactionViewController) {
         val command = UiUtils.getUserInput("enter command here: ", last = " ").toInt()
         when(command){
             1 -> transController.addTransaction()
+            2 -> transController.getAllTransactions()
+            4 -> {
+
+                var transUuid: UUID?
+                do {
+                    var trnasId = UiUtils.getUserInput("enter the transaction id ")
+                     transUuid = try {
+                        UUID.fromString(trnasId)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }while (transUuid == null)
+                transController.editTransaction(transUuid)
+            }
         }
     }
 
