@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 object Validators {
-    fun checkIsValidInputAmount(amount:String):Boolean{
+    fun isValidInputAmount(amount:String):Boolean{
         if (amount.isBlank()){
             return false
         }else if (!amount.matches(Regex("^\\d*\\.?\\d+$"))){
@@ -14,7 +14,7 @@ object Validators {
         }
         return true
     }
-    fun checkIsValidDescription(description:String):Boolean{
+    fun isValidDescription(description:String):Boolean{
         if (description.isBlank()){
             return true
         }else if (!description.any{it.isLetter()}){
@@ -22,7 +22,7 @@ object Validators {
         }
         return true
     }
-    fun checkIsValidDate(inputDate:String):Boolean{
+    fun isValidDate(inputDate:String):Boolean{
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return try {
@@ -34,7 +34,7 @@ object Validators {
 
 
     }
-    fun checkIsValidTransactionType(transactionType: String):Boolean{
+    fun isValidTransactionType(transactionType: String):Boolean{
         return if (transactionType.isBlank()){
             false
         }else if (transactionType.uppercase() != TransactionType.INCOME.toString() &&

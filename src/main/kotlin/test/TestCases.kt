@@ -1,32 +1,41 @@
 package test
-import Validators.checkIsValidDate
-import Validators.checkIsValidDescription
-import Validators.checkIsValidInputAmount
-import Validators.checkIsValidTransactionType
-import managers.*
+
+import Validators.isValidDate
+import Validators.isValidDescription
+import Validators.isValidInputAmount
+import Validators.isValidTransactionType
+import managers.TransactionManager
 import models.Category
 import models.Transaction
 import models.TransactionType
 import saver.FileManagerImpl
 import utils.ResultStatus
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 
-fun main(){
+fun main() {
 
     //region mock data for testing add function validity
     val transactionManager = TransactionManager(fileManager = FileManagerImpl())
     check(
         testName = "when amount is less than or equal zero number should return false",
-        result = transactionManager.addTransaction(Transaction(id = UUID.randomUUID(),-1.0,"", date = LocalDate.now(),
-            Category(id = UUID.randomUUID(),""), type = TransactionType.EXPENSE)),
+        result = transactionManager.addTransaction(
+            Transaction(
+                id = UUID.randomUUID(), -1.0, "", date = LocalDate.now(),
+                Category(id = UUID.randomUUID(), ""), type = TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("please enter a valid amount number")
     )
     check(
         testName = "when description is invalid like (containing only numbers,special characters) should return false",
-        result = transactionManager.addTransaction(Transaction(id = UUID.randomUUID(),1.0,"11#$44", date = LocalDate.now(),
-            Category(id = UUID.randomUUID(),""), type = TransactionType.EXPENSE)),
+        result = transactionManager.addTransaction(
+            Transaction(
+                id = UUID.randomUUID(), 1.0, "11#$44", date = LocalDate.now(),
+                Category(id = UUID.randomUUID(), ""), type = TransactionType.EXPENSE
+            )
+        ),
         acceptedResult = ResultStatus.Error("please enter a valid description")
     )
 
@@ -38,42 +47,42 @@ fun main(){
     //region add transaction test cases
     check(
         testName = "when amount is less than or equal zero number should return false",
-        result = checkIsValidInputAmount("0"),
+        result = isValidInputAmount("0"),
         acceptedResult = false
     )
     check(
         testName = "when amount is letters or special characters should return false",
-        result = checkIsValidInputAmount("a&"),
+        result = isValidInputAmount("a&"),
         acceptedResult = false
     )
     check(
         testName = "when description is invalid like (containing only numbers,special characters) should return false",
-        result = checkIsValidDescription("1213$%#"),
+        result = isValidDescription("1213$%#"),
         acceptedResult = false
     )
     check(
         testName = "when description is empty should return true",
-        result = checkIsValidDescription(""),
+        result = isValidDescription(""),
         acceptedResult = true
     )
     check(
         testName = "when date is invalid should return false",
-        result = checkIsValidDate("1-2-2024"),
+        result = isValidDate("1-2-2024"),
         acceptedResult = false
     )
     check(
         testName = "when date is empty should return false",
-        result = checkIsValidDate(""),
+        result = isValidDate(""),
         acceptedResult = false
     )
     check(
         testName = "when transaction type is empty should return false",
-        result = checkIsValidTransactionType(""),
+        result = isValidTransactionType(""),
         acceptedResult = false
     )
     check(
         testName = "when transaction type isn't one of these(INCOME,EXPENSE) should return false",
-        result = checkIsValidTransactionType("ahmed"),
+        result = isValidTransactionType("ahmed"),
         acceptedResult = false
     )
     //endregion
@@ -108,17 +117,17 @@ fun main(){
     // region view transaction test cases
     check(
         testName = "when transaction id is not found then should return null",
-        result= false,
+        result = false,
         acceptedResult = false,
     )
     check(
         testName = "when transaction id is found then should return transaction",
-        result= true,
+        result = true,
         acceptedResult = true,
     )
     check(
         testName = "when transaction id is not valid then should return null",
-        result= false,
+        result = false,
         acceptedResult = false,
     )
     // endregion
@@ -186,80 +195,78 @@ fun main(){
     check(
         testName = "When the user adds a category with a valid name should return true",
         result = false,
-        acceptedResult =true ,
+        acceptedResult = true,
     )
     check(
         testName = "When the user tries to add a category with the same name should return false ",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with an empty string should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with special character should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add invalid category type should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with spaces should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     //endregion
-
 
 
     // region Edit Category Test Case
     check(
         testName = "When the user edit a category with a valid name and valid id should return true",
         result = false,
-        acceptedResult =true ,
+        acceptedResult = true,
     )
     check(
         testName = "When the user tries to edit a category with the same name and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to edit a category with an empty string and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add invalid category type and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with spaces and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a valid category name and negative id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a valid category name and invalid type of id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     //endregion
-
 
 
     //region View Category Test Case
@@ -274,7 +281,6 @@ fun main(){
         acceptedResult = false
     )
     //endregion
-
 
 
     // region Delete Category Test Case
@@ -377,18 +383,30 @@ fun main(){
 
 //region Monthly Summary Test Cases
 
-    check(testName = "when no transactions in month should return NoTransactions", result = false, acceptedResult = false)
+    check(
+        testName = "when no transactions in month should return NoTransactions",
+        result = false,
+        acceptedResult = false
+    )
     check(testName = "when year is after now should return error", result = false, acceptedResult = false)
-    check(testName = "when month is after current month in current year should return error", result = false, acceptedResult = false)
+    check(
+        testName = "when month is after current month in current year should return error",
+        result = false,
+        acceptedResult = false
+    )
     check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
     check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
+    check(
+        testName = "when valid month with transactions should return correct summary",
+        result = false,
+        acceptedResult = false
+    )
 
 //endregion
 
 }
 
 fun <T> check(testName: String, result: T, acceptedResult: T) {
-    if(result == acceptedResult) println("Success - $testName")
+    if (result == acceptedResult) println("Success - $testName")
     else println("Fail - $testName")
 }
