@@ -67,6 +67,13 @@ class CategoryManager(private val fileManager: IFileManager) {
         }
         return ResultStatus.Error("Invalid Data")
     }
+   
+    fun isValidCategoryToEdit(categoryName:String,categoryID:String): ResultStatus<String>{
+        val oldObject=fileManager.getObjectById(categoryID, Category::class.java)
+        if ((categoryName.matches(Regex("^[A-Za-z]+$"))) && oldObject != null)
+            return ResultStatus.Success("Success Editing")
 
+        return ResultStatus.Error("Please Enter Valid Id and Name")
+    }
 
 }

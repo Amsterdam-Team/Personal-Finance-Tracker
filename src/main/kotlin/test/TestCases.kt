@@ -1,13 +1,15 @@
 package test
 
+import Validators.isValidCategory
 import Validators.isValidCategoryName
+import Validators.isValidDate
+import Validators.isValidDescription
+import Validators.isValidID
 import models.Category
 import utils.ResultStatus
 import managers.*
 import models.Transaction
 import models.TransactionType
-import models.reports.CategorySummary
-import models.reports.MonthlySummary
 import reports.MonthlySummaryManager
 import java.time.LocalDate
 import java.util.*
@@ -20,9 +22,10 @@ import saver.IFileManager
 
 fun main(){
 //region Transactions Test Cases
-//todo: write all test cases that related with transactions here :)
+
       //region mock data for testing add function validity
     val transactionManager = TransactionManager(fileManager = FileManagerImpl())
+    val categoryManager = CategoryManager(fileManager = FileManagerImpl())
     check(
         testName = "when amount is less than or equal zero number should return false",
         result = transactionManager.addTransaction(
@@ -47,7 +50,6 @@ fun main(){
     //end region
 
 //region Transactions Test Cases
-//todo: write all test cases that related with transactions here :)
 
     //region add transaction test cases
     check(
@@ -119,6 +121,7 @@ fun main(){
         acceptedResult = true
     )
     // end region
+
     // region view transaction test cases
     check(
         testName = "when transaction id is not found then should return null",
@@ -178,9 +181,7 @@ fun main(){
         )
         // endregion
 
-//region Edit Transaction Test Cases
-
-
+   //region Edit Transaction Test Cases
 
     check(
         testName = "when amount of existing transaction equals zero or negative number return false",
@@ -230,10 +231,10 @@ fun main(){
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     //endregion
+
 //endregion
 
-
-//region Category Test Cases
+    //region Category Test Cases
 
     // region add Category Test Case
     check(
@@ -263,51 +264,49 @@ fun main(){
         acceptedResult = ResultStatus.Error("Invalid Name") ,
     )
 
-
-
     //endregion
 
 
     // region Edit Category Test Case
     check(
         testName = "When the user edit a category with a valid name and valid id should return true",
-        result = false,
-        acceptedResult = true,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Success("Success Editing"),
     )
     check(
-        testName = "When the user tries to edit a category with the same name and valid id should return false",
-        result = false,
-        acceptedResult = false,
+        testName = "When the user tries to edit a category with the same name and valid id should return true",
+        result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Success("Success Editing"),
     )
     check(
         testName = "When the user tries to edit a category with an empty string and valid id should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Error("Enter Valid Name"),
     )
     check(
         testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "@@", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az-5545454"),
+        acceptedResult = ResultStatus.Error("Enter Valid Name and ID"),
     )
     check(
         testName = "When the user tries to add invalid category type and valid id should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "4565465", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Error("Enter Valid Name"),
     )
     check(
         testName = "When the user tries to add a category with spaces and valid id should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = " Food ", categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Error("Enter Valid Name"),
     )
     check(
         testName = "When the user tries to add a valid category name and negative id should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "-5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"),
+        acceptedResult = ResultStatus.Error("Enter Valid ID"),
     )
     check(
         testName = "When the user tries to add a valid category name and invalid type of id should return false",
-        result = false,
-        acceptedResult = false,
+        result = categoryManager.isValidCategoryToEdit(categoryName = "Food", categoryID = "kah;khf"),
+        acceptedResult = ResultStatus.Error("Enter Valid ID"),
     )
     //endregion
 
@@ -465,9 +464,6 @@ val fileMgr: IFileManager = FileManagerImpl()
         result = MonthlySummaryManager(fileMgr).getMonthlySummary(1999, 6),
         acceptedResult = ResultStatus.Error("Year must be 2000 or later")
     )
-
-
-
 
 //endregion
 
