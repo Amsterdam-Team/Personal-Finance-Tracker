@@ -1,11 +1,30 @@
 package test
-import managers.checkIsValidDate
-import managers.checkIsValidDescription
-import managers.checkIsValidInputAmount
-import managers.checkIsValidTransactionType
+import managers.*
+import models.Category
+import models.Transaction
+import models.TransactionType
+import saver.FileManagerImpl
+import utils.ResultStatus
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import javax.swing.text.html.HTML.Tag.DD
 
 
 fun main(){
+
+    val transaction:TransactionManager = TransactionManager(fileManager = FileManagerImpl())
+    val type:TransactionType=TransactionType.EXPENSE
+    val id:UUID =UUID.randomUUID()
+    val category:Category = Category(id,"")
+    val date = LocalDate.now()
+    println(date.toString())
+    val transactionData:Transaction = Transaction(id,1.0,"",date ,category,type )
+    val check = transaction.addTransaction(transactionData)
+    println(check)
+
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
@@ -33,7 +52,7 @@ fun main(){
     )
     check(
         testName = "when date is invalid should return false",
-        result = checkIsValidDate("1/12/0024"),
+        result = checkIsValidDate("1-2-2024"),
         acceptedResult = false
     )
     check(
