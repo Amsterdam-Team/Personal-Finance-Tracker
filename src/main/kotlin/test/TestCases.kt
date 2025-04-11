@@ -338,30 +338,7 @@ fun main(){
 
 //region Monthly Summary Test Cases
 
-    fun <T> checkMonthlySummary(
-        testName: String,
-        result: ResultStatus<T>,
-        expected: ResultStatus<T>
-    ) {
-        val passed = when {
-            result is ResultStatus.Error && expected is ResultStatus.Error ->
-                result.errorMessage == expected.errorMessage
 
-            result is ResultStatus.Empty && expected is ResultStatus.Empty ->
-                result.message == expected.message
-
-            result is ResultStatus.Success && expected is ResultStatus.Success ->
-                result.data == expected.data
-
-            else -> false
-        }
-
-        if (passed) {
-            println("Success - $testName")
-        } else {
-            println("Failed - $testName")
-        }
-    }
 
     val carCategory = Category(id = 1, name = "car")
     val salaryCategory = Category(id = 2, name = "salary")
@@ -373,37 +350,37 @@ fun main(){
         Transaction(3, 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE)
     )
 
-    checkMonthlySummary(
+    check(
         "when no transactions in month should return Empty",
         MonthlySummaryManager().getMonthlySummary(2023, 7, testTransactions),
         ResultStatus.Empty("There are no transactions this month")
     )
 
-    checkMonthlySummary(
+    check(
         "when year is after now should return Error",
         MonthlySummaryManager().getMonthlySummary(LocalDate.now().year + 1, 6, testTransactions),
         ResultStatus.Error("Cannot view summary for future years")
     )
 
-    checkMonthlySummary(
+    check(
         "when month is after current month in current year should return Error",
         MonthlySummaryManager().getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1, testTransactions),
         ResultStatus.Error("Cannot view summary for future months")
     )
 
-    checkMonthlySummary(
+    check(
         "when month number is invalid should return Error",
         MonthlySummaryManager().getMonthlySummary(2023, 13, testTransactions),
         ResultStatus.Error("Month must be between 1 and 12")
     )
 
-    checkMonthlySummary(
+    check(
         "when year number is invalid should return Error",
         MonthlySummaryManager().getMonthlySummary(1999, 6, testTransactions),
         ResultStatus.Error("Year must be 2000 or later")
     )
 
-    checkMonthlySummary(
+    check(
         "when valid month with transactions should return correct summary",
         MonthlySummaryManager().getMonthlySummary(2023, 6, testTransactions),
         ResultStatus.Success(
