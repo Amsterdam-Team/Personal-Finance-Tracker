@@ -1,11 +1,23 @@
 package utils
 
+import models.Category
 import models.TransactionType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.util.*
 
 object Validator {
+    fun isValidCategoryID(categories: List<Category>, id: UUID): ResultStatus<String> {
+        if (id.toString().isBlank() || id.toString().contains(" "))
+            return ResultStatus.Error("Invalid Id")
+        else {
+            val category = categories.find { it.id == id }
+            if (category == null)
+                return ResultStatus.Success("success")
+        }
+        return ResultStatus.Error("Id Already Exists")
+    }
     fun isValidInputAmount(amount:String):ResultStatus<String>{
         if (amount.isBlank()){
             return ResultStatus.Empty("please enter an amount")
@@ -42,5 +54,10 @@ object Validator {
         }else{
             ResultStatus.Success("Successfully added ur transaction type $transactionType")
         }
+    }
+    fun isValidID(id: UUID): ResultStatus<String> {
+        if (id.toString().contains(" ") || id.toString().isBlank())
+            return ResultStatus.Error("Invalid Id")
+        return ResultStatus.Success("success")
     }
 }

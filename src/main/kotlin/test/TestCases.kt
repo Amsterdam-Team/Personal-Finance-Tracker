@@ -1,5 +1,6 @@
 //package test
-//
+package test
+
 //import managers.isValidCategoryName
 //import models.Category
 //import utils.ResultStatus

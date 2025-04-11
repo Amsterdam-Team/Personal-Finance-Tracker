@@ -1,25 +1,60 @@
 package managers
 
+import Validators.isValidCategory
 import Validators.isValidDate
 import Validators.isValidDescription
+import Validators.isValidID
 import Validators.isValidInputAmount
 import Validators.isValidTransactionType
-import com.sun.jdi.IntegerType
 import models.Category
 import models.Transaction
-import models.TransactionType
 
 import saver.IFileManager
 import utils.ResultStatus
-import java.text.DateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.*
-import java.util.zip.DataFormatException
-
 
 class TransactionManager(private val fileManager: IFileManager) {
+    fun viewTransactionById(inputId: String): ResultStatus<Transaction> {
+        return when (val validationResult = validateUUID(inputId)) {
+            is ResultStatus.Success -> {
+                val uuid = validationResult.data
+                try {
+                    val transaction = fileManager.getObjectById(uuid.toString(), Transaction::class.java)
+                    if (transaction != null) {
+                        ResultStatus.Success(transaction)
+                    } else {
+                        ResultStatus.Error("Transaction not found.")
+                    }
+                } catch (e: Exception) {
+                    ResultStatus.Error("Error reading the file: ${e.message}")
+                }
+            }
+            is ResultStatus.Error -> ResultStatus.Error(validationResult.errorMessage)
+            is ResultStatus.Empty -> ResultStatus.Error(validationResult.message)
+        }
+    }
+
+    fun viewAllTransactions(): List<Pair<String, String>> {
+        val transactions = fileManager.getAllObjects(Transaction::class.java)
+        return transactions.map {
+            Pair(it.id.toString(), it.description)
+        }
+    }
+
+
+// TODO Moved this function based on the team's feedback
+private fun validateUUID(input: String): ResultStatus<UUID> {
+    val trimmed = input.trim()
+    if (trimmed.isEmpty()) {
+        return ResultStatus.Error("Input is empty or contains only spaces.")
+    }
+
+    return try {
+        ResultStatus.Success(UUID.fromString(trimmed))
+    } catch (e: IllegalArgumentException) {
+        ResultStatus.Error("You must enter a valid UUID.")
+    }
+}
 
     fun addTransaction(transaction: Transaction): ResultStatus<String> {
 
@@ -44,16 +79,7 @@ class TransactionManager(private val fileManager: IFileManager) {
 
     }
 
-    fun getAllTransaction(): ResultStatus<List<Transaction>>{
-        val transactions = fileManager.getAllObjects(Transaction::class.java)
-        return ResultStatus.Success(transactions)
-    }
-//    fun getTransactionById(id: UUID): ResultStatus<Transaction>{
-//        val transactions = fileManager.getAllObjects(Transaction::class.java)
-//        transactions.
-//
-//        return ResultStatus.Success(transactions)
-//    }
+
 
     fun editTransaction(
         transaction: Transaction
@@ -68,10 +94,10 @@ class TransactionManager(private val fileManager: IFileManager) {
         if (listOf(
                 isValidID(transaction.id),
                 isValidDescription(transaction.description),
-                isValidaType(transaction.type.toString()),
+                isValidTransactionType(transaction.type.toString()),
                 isValidDate(transaction.date.toString()),
                 isValidCategory( transaction.category.name),
-                isValidAmount(transaction.amount)
+                isValidInputAmount(transaction.amount.toString())
             ).all { it == ResultStatus.Success("success") }
         ) {
             fileManager.deleteObjectById(transaction.id,Transaction::class.java)
@@ -84,56 +110,4 @@ class TransactionManager(private val fileManager: IFileManager) {
 
     }
 }
-
-fun isValidID(id: UUID): ResultStatus<String> {
-
-
-
-    if (id.toString().contains(" ") || id.toString().isBlank())
-        return ResultStatus.Error("Invalid Id")
-    return ResultStatus.Success("success")
-}
-
-fun isValidAmount(amount: Double?): ResultStatus<String> {
-
-
-    if (amount != null && amount > 0.0)
-        return ResultStatus.Success("success")
-    return ResultStatus.Error("Invalid Amount")
-}
-
-fun isValidCategory (category: String): ResultStatus<String> {
-    if (category.isBlank())
-        return ResultStatus.Error("Invalid Category")
-    return ResultStatus.Success("success")
-
-}
-
-fun isValidaType(type: String): ResultStatus<String> {
-    if (enumValues<TransactionType>().any { it.name.equals(type, ignoreCase = true) })
-        return ResultStatus.Success("success")
-    else
-        return ResultStatus.Error("Invalid Type")
-}
-
-fun isValidDescription(input: String): ResultStatus<String> {
-    val regex = Regex("^(?=.*[a-zA-Z]).*$")
-    if (regex.matches(input) || input.isBlank())
-        return ResultStatus.Success("success")
-    return ResultStatus.Error("Invalid Description")
-}
-
-fun isValidDate(date: String): ResultStatus<String> {
-    val formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy")
-    if (date.isNotBlank()) {
-        return try {
-            LocalDate.parse(date, formatter)
-            ResultStatus.Success("success")
-        } catch (e: DateTimeParseException) {
-            ResultStatus.Error("Invalid Date")
-        }
-    }
-    return ResultStatus.Error("Invalid Date")
-}
-
 
