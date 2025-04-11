@@ -4,6 +4,7 @@ import models.Category
 import saver.IFileManager
 import utils.ResultStatus
 import utils.Validator.isValidCategoryID
+import utils.Validator.isValidCategoryName
 import utils.Validator.isValidInput
 import java.util.UUID
 
@@ -69,7 +70,7 @@ class CategoryManager(private val fileManager: IFileManager) {
         val categories = fileManager.getAllObjects(Category::class.java)
         if (listOf(
                 isValidCategoryID(categories, id),
-                isValidInput(name)
+                isValidCategoryName(categories,name)
             ).all { it == ResultStatus.Success("success") }
         ) {
             fileManager.saveObject(Category(id, name))
