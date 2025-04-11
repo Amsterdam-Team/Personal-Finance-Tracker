@@ -3,6 +3,12 @@ package test
 import managers.CategoryManager
 import managers.TransactionManager
 import models.Category
+import models.Transaction
+import models.TransactionType
+import saver.FileManagerImpl
+import utils.ResultStatus
+import utils.Validator
+import java.time.LocalDate
 import saver.FileManagerImpl
 import utils.ResultStatus
 import utils.Validator
@@ -18,6 +24,7 @@ fun main() {
     val fileManager = FileManagerImpl()
     val transactionManager = TransactionManager(fileManager)
     val categoryManager = CategoryManager(fileManager)
+
 
 //region add transaction test cases
     check(
@@ -135,6 +142,54 @@ fun main() {
         )
     }
     // endregion
+
+//region Edit Transaction Test Cases
+
+
+    check(
+        testName = "when amount of existing transaction equals zero or negative number return false",
+        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
+            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("Invalid Data")
+    )
+    check(
+        testName = "when amount is something else number should return false",
+        result = isValidInputAmount("fekdf"),
+        acceptedResult = ResultStatus.Error("amount number shouldn't contain any letters or special characters")
+    )
+    check(
+        testName = "when id of transaction is invalid should return false",
+        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
+            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("Invalid Data")
+    )
+    check(
+        testName = "when description is invalid like (numbers,special characters) should return false",
+        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0,"Shopping", LocalDate.now(),Category(
+            UUID.randomUUID(),"$%#&$"),TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("Invalid Data")
+    )
+
+    check(
+        testName = "when transaction type is empty should return false",
+        result = isValidTransactionType(""),
+        acceptedResult = ResultStatus.Error("please enter a transaction type ")
+    )
+    check(
+        testName = "when category type is empty should return false",
+        result = transactionManager.editTransaction(Transaction(UUID.randomUUID(),0.0," ", LocalDate.now(),Category(
+            UUID.randomUUID(),""),TransactionType.EXPENSE)),
+        acceptedResult = ResultStatus.Error("Invalid Data")
+    )
+    check(
+        testName = "when category type is invalid return false",
+        result =transactionManager.editTransaction(
+            Transaction(UUID.randomUUID(),0.0,"Rent", LocalDate.now(), Category(
+            UUID.randomUUID(),""), TransactionType.EXPENSE)
+        ),
+        acceptedResult = ResultStatus.Error("Invalid Data")
+    )
+    //endregion
 
     // region validators test cases
     check(
