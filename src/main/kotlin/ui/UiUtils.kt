@@ -193,6 +193,22 @@ class UiUtils {
             return date
         }
 
+         fun getCategoryUuid(msg: String) :UUID{
+            var categoryUuid: UUID?
+            do {
+                var categoryId = getUserInput(msg)
+                categoryUuid = try {
+                    UUID.fromString(categoryId)
+                } catch (e: Exception) {
+                    null
+
+                }
+                if (categoryUuid == null){
+                    println("invalid uuid; please enter valid uuid")
+                }
+            }while (categoryUuid == null)
+            return categoryUuid
+        }
         fun getUserUUID(): UUID{
             var transUuid: UUID?
             do {

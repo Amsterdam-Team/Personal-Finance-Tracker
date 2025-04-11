@@ -2,7 +2,7 @@ package ui
 
 import java.util.*
 
-class ApplicationView (val transController :TransactionViewController, val reportController: ReportViewController) {
+class ApplicationView (val transController :TransactionViewController, val reportController: ReportViewController, val categoryController: CategoryViewController) {
     fun start(){
         var name = " "
         do {
@@ -19,26 +19,7 @@ class ApplicationView (val transController :TransactionViewController, val repor
 
     }
 
-    fun showAvailableCommands(){
-        println("Available commands:")
-        println("T -> transaction commands")
-        println("C -> Category commands")
-        println("MS -> Monthly Summary")
-        println("BR -> Balance Report")
-        println("Exit -> exit")
 
-
-
-    }
-    private fun showTransCommand(){
-        println("Transaction commands: ")
-        println("press 1 for add transaction")
-        println("press 2 for view transaction")
-        println("press 3 for delete transaction")
-        println("press 4 for edit transaction")
-
-
-    }
 
 
      private fun handleUserCommand(command:String){
@@ -51,6 +32,10 @@ class ApplicationView (val transController :TransactionViewController, val repor
             "ms"-> {
                 handleMonthlySummary()
             }
+            "c" -> {
+                handleCategoryCommand()
+            }
+
             else -> {
                 showAvailableCommands()
                 var userCommand = UiUtils.getUserInput("Enter specific command")
@@ -59,6 +44,37 @@ class ApplicationView (val transController :TransactionViewController, val repor
 
         }
 
+    }
+    private fun handleCategoryCommand(){
+        showCategoryCommand()
+        val command = UiUtils.getUserInput("enter command here: ", last = " ").toIntOrNull() ?: handleTransactionCommand()
+        when(command){
+            1 -> {
+                val category = UiUtils.getCategoryFromUser()
+                categoryController.addCategory(category)
+                reshowMajorCommands()
+            }
+            2 -> {
+                categoryController.viewAllCategories()
+                reshowMajorCommands()
+            }
+            4 -> {
+
+                val categoryUuid =UiUtils.getCategoryUuid("enter the category id you want to edit ")
+                categoryController.editCategory(categoryUuid)
+                reshowMajorCommands()
+            }
+            3 -> {
+                val categoryUuid =UiUtils.getCategoryUuid("enter the category id you want to delete ")
+                categoryController.deleteCategory(categoryUuid)
+                reshowMajorCommands()
+            }
+            else -> {
+                println("enter valid category command")
+                handleTransactionCommand()
+
+            }
+        }
     }
     private fun handleTransactionCommand(){
         showTransCommand()
@@ -117,4 +133,33 @@ class ApplicationView (val transController :TransactionViewController, val repor
         handleUserCommand(userCommand.toString())
     }
 
+    fun showAvailableCommands(){
+        println("Available commands:")
+        println("T -> transaction commands")
+        println("C -> Category commands")
+        println("MS -> Monthly Summary")
+        println("BR -> Balance Report")
+        println("Exit -> exit")
+
+
+
+    }
+    private fun showTransCommand(){
+        println("Transaction commands: ")
+        println("press 1 for add transaction")
+        println("press 2 for view transaction")
+        println("press 3 for delete transaction")
+        println("press 4 for edit transaction")
+
+
+    }
+    private fun showCategoryCommand(){
+        println("Category commands: ")
+        println("press 1 for add category")
+        println("press 2 for view all categories")
+        println("press 3 for delete category")
+        println("press 4 for edit category")
+
+
+    }
 }

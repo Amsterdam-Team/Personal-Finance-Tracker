@@ -15,10 +15,7 @@ class TransactionViewController (){
         println(transaction)
     }
 
-    fun addCategory() {
-        var category = UiUtils.getCategoryFromUser()
 
-    }
     fun editTransaction(id: UUID){
         // get transaction with this specific id
         // get the new data but we need to present the old data as well
