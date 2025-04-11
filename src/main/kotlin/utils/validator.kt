@@ -25,6 +25,7 @@ object Validator {
         return ResultStatus.Success("Successfully added ur input $input")
     }
     fun isValidDate(inputDate:String):ResultStatus<String>{
+        if (inputDate.isBlank()) ResultStatus.Empty("please enter the date")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return try {
             val date = LocalDate.parse(inputDate, formatter)
