@@ -1,5 +1,12 @@
 package test
 import models.Category
+import models.Transaction
+import models.TransactionType
+import models.reports.CategorySummary
+import models.reports.MonthlySummary
+import reports.MonthlySummaryManager
+import utils.ResultStatus
+import java.time.LocalDate
 
 
 fun main(){
@@ -331,12 +338,95 @@ fun main(){
 
 //region Monthly Summary Test Cases
 
-    check(testName = "when no transactions in month should return NoTransactions", result = false, acceptedResult = false)
-    check(testName = "when year is after now should return error", result = false, acceptedResult = false)
-    check(testName = "when month is after current month in current year should return error", result = false, acceptedResult = false)
-    check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
+    fun <T> checkMonthlySummary(
+        testName: String,
+        result: ResultStatus<T>,
+        expected: ResultStatus<T>
+    ) {
+        val passed = when {
+            result is ResultStatus.Error && expected is ResultStatus.Error ->
+                result.errorMessage == expected.errorMessage
+
+            result is ResultStatus.Empty && expected is ResultStatus.Empty ->
+                result.message == expected.message
+
+            result is ResultStatus.Success && expected is ResultStatus.Success ->
+                result.data == expected.data
+
+            else -> false
+        }
+
+        if (passed) {
+            println("Success - $testName")
+        } else {
+            println("Failed - $testName")
+        }
+    }
+
+    val carCategory = Category(id = 1, name = "car")
+    val salaryCategory = Category(id = 2, name = "salary")
+    val rentCategory = Category(id = 3, name = "rent")
+
+    val testTransactions = listOf(
+        Transaction(1, 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
+        Transaction(2, 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE),
+        Transaction(3, 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE)
+    )
+
+    checkMonthlySummary(
+        "when no transactions in month should return Empty",
+        MonthlySummaryManager().getMonthlySummary(2023, 7, testTransactions),
+        ResultStatus.Empty("There are no transactions this month")
+    )
+
+    checkMonthlySummary(
+        "when year is after now should return Error",
+        MonthlySummaryManager().getMonthlySummary(LocalDate.now().year + 1, 6, testTransactions),
+        ResultStatus.Error("Cannot view summary for future years")
+    )
+
+    checkMonthlySummary(
+        "when month is after current month in current year should return Error",
+        MonthlySummaryManager().getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1, testTransactions),
+        ResultStatus.Error("Cannot view summary for future months")
+    )
+
+    checkMonthlySummary(
+        "when month number is invalid should return Error",
+        MonthlySummaryManager().getMonthlySummary(2023, 13, testTransactions),
+        ResultStatus.Error("Month must be between 1 and 12")
+    )
+
+    checkMonthlySummary(
+        "when year number is invalid should return Error",
+        MonthlySummaryManager().getMonthlySummary(1999, 6, testTransactions),
+        ResultStatus.Error("Year must be 2000 or later")
+    )
+
+    checkMonthlySummary(
+        "when valid month with transactions should return correct summary",
+        MonthlySummaryManager().getMonthlySummary(2023, 6, testTransactions),
+        ResultStatus.Success(
+            MonthlySummary(
+                categorySummaries = listOf(
+                    CategorySummary(
+                        category = salaryCategory,
+                        type = TransactionType.INCOME,
+                        totalAmount = 5000.0
+                    ),
+                    CategorySummary(
+                        category = carCategory,
+                        type = TransactionType.EXPENSE,
+                        totalAmount = 200.0
+                    )
+                ),
+                transactions = listOf(
+                    Transaction(1, 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
+                    Transaction(2, 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE)
+                )
+            )
+        )
+    )
 
 //endregion
 
