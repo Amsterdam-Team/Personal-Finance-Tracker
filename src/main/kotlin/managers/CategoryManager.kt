@@ -7,6 +7,4 @@ import java.util.*
 
 class CategoryManager(private val fileManager: IFileManager) {
 
-
-
 }
