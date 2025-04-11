@@ -60,4 +60,16 @@ object Validator {
             return ResultStatus.Error("Invalid Id")
         return ResultStatus.Success("success")
     }
+    fun isValidCategoryName(categories: List<Category>, name: String): ResultStatus<String> {
+        if (name.isBlank() || name.contains(' '))
+            return ResultStatus.Error("Invalid Name")
+        else {
+            if (name.matches(Regex("^[a-zA-Z ]+$"))) {
+                val category = categories.find { it.name.equals(name, ignoreCase = true)}
+                if (category == null)
+                    return ResultStatus.Success("success")
+            }
+        }
+        return ResultStatus.Error("Invalid Name")
+    }
 }
