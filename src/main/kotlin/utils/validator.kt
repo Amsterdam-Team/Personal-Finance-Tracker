@@ -26,7 +26,7 @@ object Validator {
         }else if(amount <= 0.0 .toString()) {
             return ResultStatus.Error("amount number should be more than zero")
         }
-         return ResultStatus.Success("Successfully added ur amount $amount")
+         return ResultStatus.Success("success")
     }
     fun isValidInput(input:String):ResultStatus<String>{
         if (input.isBlank()){
@@ -34,13 +34,13 @@ object Validator {
         }else if (!input.any{it.isLetter()}){
             return ResultStatus.Error("input shouldn't be numbers or special characters only it must have a letters")
         }
-        return ResultStatus.Success("Successfully added ur input $input")
+        return ResultStatus.Success("success")
     }
     fun isValidDate(inputDate:String):ResultStatus<String>{
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return try {
             val date = LocalDate.parse(inputDate, formatter)
-        ResultStatus.Success("Successfully added ur $date")
+        ResultStatus.Success("success")
         } catch (e: DateTimeParseException) {
             ResultStatus.Error("please enter a valid date with that format : yyyy-MM-dd")
         }
@@ -52,7 +52,7 @@ object Validator {
             transactionType.uppercase() != TransactionType.EXPENSE.toString() ){
             ResultStatus.Error("please enter one of these types only (INCOME,EXPENSE)")
         }else{
-            ResultStatus.Success("Successfully added ur transaction type $transactionType")
+            ResultStatus.Success("success")
         }
     }
     fun isValidID(id: UUID): ResultStatus<String> {

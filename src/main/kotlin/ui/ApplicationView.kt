@@ -1,5 +1,6 @@
 package ui
 
+import java.lang.Thread.sleep
 import java.util.*
 
 class ApplicationView (val transController :TransactionViewController, val reportController: ReportViewController, val categoryController: CategoryViewController) {
@@ -91,13 +92,20 @@ class ApplicationView (val transController :TransactionViewController, val repor
                 transController.getAllTransactions()
                 reshowMajorCommands()
             }
+            5 ->{
+                transController.getAllTransactions()
+                val id = UiUtils.getUserUUID()
+                transController.getTransactionById(id)
+                reshowMajorCommands()
+            }
             4 -> {
-
+                transController.getAllTransactions()
                val transactionUuid =UiUtils.getUserUUID()
                 transController.editTransaction(transactionUuid)
                 reshowMajorCommands()
             }
             3 -> {
+                transController.getAllTransactions()
                 val transactionUUID =UiUtils.getUserUUID()
                 transController.deleteTransaction(transactionUUID)
                 reshowMajorCommands()
@@ -143,6 +151,7 @@ class ApplicationView (val transController :TransactionViewController, val repor
     }
 
     fun showAvailableCommands(){
+        sleep(2000)
         println("Available commands:")
         println("T -> transaction commands")
         println("C -> Category commands")
@@ -156,9 +165,10 @@ class ApplicationView (val transController :TransactionViewController, val repor
     private fun showTransCommand(){
         println("Transaction commands: ")
         println("press 1 for add transaction")
-        println("press 2 for view transaction")
+        println("press 2 for view all transactions")
         println("press 3 for delete transaction")
         println("press 4 for edit transaction")
+        println("press 5 for view single transaction by Id ")
 
 
     }

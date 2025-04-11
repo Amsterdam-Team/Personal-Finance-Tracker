@@ -9,10 +9,19 @@ class ReportViewController(private val monthlySummaryManager : MonthlySummaryMan
 
     fun getMonthlySummary(month:Int, year:Int){
         // call getMonthlySummary method from MonthlySummaryManager class
-        val result = monthlySummaryManager.getMonthlySummary(month, year)
+        val result = monthlySummaryManager.getMonthlySummary(year, month)
         UiUtils.displayMessage("monthly summary for this date ${month}/${year} is .......")
         if (result is ResultStatus.Success){
-            UiUtils.displayMessage(result.data.toString())
+            UiUtils.displayMessage("All categories: ")
+
+            result.data.categorySummaries.forEach {
+                UiUtils.displayMessage("${it.category.name}: ${it.type} --> ${it.totalAmount}")
+            }
+            UiUtils.displayMessage("All Transactions: ")
+
+            result.data.transactions.forEach {
+                UiUtils.displayMessage("${it.description} : ${it.type} --> ${it.amount}")
+            }
         }else if (result is ResultStatus.Error){
             UiUtils.displayMessage(result.errorMessage)
         }else if (result is ResultStatus.Empty){
@@ -26,7 +35,17 @@ class ReportViewController(private val monthlySummaryManager : MonthlySummaryMan
         val result = balanceReportManager.getBalanceReport(startDate)
         when (result) {
             is ResultStatus.Success -> {
-                UiUtils.displayMessage(result.data.toString())
+                UiUtils.displayMessage("----------------")
+
+                UiUtils.displayMessage("Balance Report:")
+                UiUtils.displayMessage("----------------")
+
+                UiUtils.displayMessage("Total Income :${result.data.totalIncome}")
+                UiUtils.displayMessage("Total Expenses :${result.data.totalExpenses}")
+                UiUtils.displayMessage("----------------")
+                UiUtils.displayMessage("Net Balance :${result.data.netBalance}")
+
+
             }
             is ResultStatus.Error -> {
                 UiUtils.displayMessage(result.errorMessage)

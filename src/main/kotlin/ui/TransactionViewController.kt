@@ -66,7 +66,7 @@ class TransactionViewController (val transactionManager: TransactionManager){
 
     }
     fun deleteTransaction(id :UUID){
-        println("deleting this transaction")
+        transactionManager
     }
     fun getAllTransactions(){
         val trnasList = listOf<Transaction>(
@@ -96,7 +96,7 @@ class TransactionViewController (val transactionManager: TransactionManager){
             )
 
         )
-        var result = transactionManager.getAllTransaction()
+        var result = transactionManager.viewAllTransactions()
         when(result){
             is ResultStatus.Success -> {
                 for (trn in result.data){
@@ -107,6 +107,21 @@ class TransactionViewController (val transactionManager: TransactionManager){
         }
 
 
+    }
+    fun getTransactionById(id: UUID) {
+        val result= transactionManager.viewTransactionById(id.toString())
+        when(result){
+            is ResultStatus.Success -> {
+                UiUtils.displayMessage("The transaction: ${result.data.toString()}")
+            }
+            is ResultStatus.Error -> {
+                UiUtils.displayMessage(result.errorMessage)
+            }
+            is ResultStatus.Empty -> {
+                UiUtils.displayMessage(result.message)
+            }
+            else -> Unit
+        }
     }
 
 }

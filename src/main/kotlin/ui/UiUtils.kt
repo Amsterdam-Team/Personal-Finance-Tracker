@@ -20,8 +20,6 @@ class UiUtils {
                 }
                 if(property.name == "amount"){
                     // add category
-
-
                     transMap["amount"] = getAmountValue()
 
                     continue
