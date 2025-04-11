@@ -1,6 +1,6 @@
 package test
 
-
+import managers.isValidCategoryName
 import models.Category
 import utils.ResultStatus
 import managers.*
@@ -14,59 +14,76 @@ import saver.FileManagerImpl
 fun main(){
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
-       //region add transaction test cases
-        check(
-            testName = "when amount is less than or equal zero number should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when amount is something else number should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when id of transaction is already associated with another transaction should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when description is invalid like (numbers,special characters) should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when description is empty should return true",
-            result = true,
-            acceptedResult = true
-        )
-        check(
-            testName = "when date is invalid should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when date is empty should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when transaction type is empty should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when category type is empty should return false",
-            result = false,
-            acceptedResult = false
-        )
-        check(
-            testName = "when category is invalid like (numbers,special characters) should return false",
-            result = false,
-            acceptedResult = false
-        )
-        //endregion
+      //region mock data for testing add function validity
+    val transactionManager = TransactionManager(fileManager = FileManagerImpl())
+    check(
+        testName = "when amount is less than or equal zero number should return false",
+        result = transactionManager.addTransaction(
+            Transaction(
+                id = UUID.randomUUID(), -1.0, "", date = LocalDate.now(),
+                Category(id = UUID.randomUUID(), ""), type = TransactionType.EXPENSE
+            )
+        ),
+        acceptedResult = ResultStatus.Error("please enter a valid amount number")
+    )
+    check(
+        testName = "when description is invalid like (containing only numbers,special characters) should return false",
+        result = transactionManager.addTransaction(
+            Transaction(
+                id = UUID.randomUUID(), 1.0, "11#$44", date = LocalDate.now(),
+                Category(id = UUID.randomUUID(), ""), type = TransactionType.EXPENSE
+            )
+        ),
+        acceptedResult = ResultStatus.Error("please enter a valid description")
+    )
 
+    //end region
+
+//region Transactions Test Cases
+//todo: write all test cases that related with transactions here :)
+
+    //region add transaction test cases
+    check(
+        testName = "when amount is less than or equal zero number should return false",
+        result = isValidInputAmount("0"),
+        acceptedResult = false
+    )
+    check(
+        testName = "when amount is letters or special characters should return false",
+        result = isValidInputAmount("a&"),
+        acceptedResult = false
+    )
+    check(
+        testName = "when description is invalid like (containing only numbers,special characters) should return false",
+        result = isValidDescription("1213$%#"),
+        acceptedResult = false
+    )
+    check(
+        testName = "when description is empty should return true",
+        result = isValidDescription(""),
+        acceptedResult = true
+    )
+    check(
+        testName = "when date is invalid should return false",
+        result = isValidDate("1-2-2024"),
+        acceptedResult = false
+    )
+    check(
+        testName = "when date is empty should return false",
+        result = isValidDate(""),
+        acceptedResult = false
+    )
+    check(
+        testName = "when transaction type is empty should return false",
+        result = isValidTransactionType(""),
+        acceptedResult = false
+    )
+    check(
+        testName = "when transaction type isn't one of these(INCOME,EXPENSE) should return false",
+        result = isValidTransactionType("ahmed"),
+        acceptedResult = false
+    )
+    //endregion
         // region view transaction test cases
         check(
             testName = "when transaction id is not found then should return null",
@@ -101,7 +118,8 @@ fun main(){
     check(
         testName = "when id of transaction is invalid should return false",
 
-        result = isValidID(UUID.fromString(" ")),
+        result = isValidID(listOf(Transaction(UUID.randomUUID(), 125.4,"",LocalDate.now(),Category(UUID.randomUUID(),""),TransactionType.EXPENSE)),
+            UUID.randomUUID()),
         acceptedResult = ResultStatus.Error("Invalid Id")
     )
     check(
@@ -127,12 +145,12 @@ fun main(){
     )
     check(
         testName = "when category type is empty should return false",
-        result = isValidCategory(" "),
+        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food")),""),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     check(
         testName = "when category type is invalid return false",
-        result = isValidCategory("Shopping"),
+        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food"),Category(UUID.randomUUID(),"Salary")),"Shopping"),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     //endregion
@@ -142,81 +160,80 @@ fun main(){
 //region Category Test Cases
 
     // region add Category Test Case
-//    check(
-//        testName = "When the user tries to add a category with the same name should return false ",
-//        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Food"),
-//        acceptedResult =ResultStatus.Error("Invalid Name") ,
-//    )
-//    check(
-//        testName = "When the user tries to add a category with an empty string should return false",
-//        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),""),
-//        acceptedResult =ResultStatus.Error("Invalid Name") ,
-//    )
-//    check(
-//        testName = "When the user tries to add a category with special character should return false",
-//        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"$#%#"),
-//        acceptedResult =ResultStatus.Error("Invalid Name") ,
-//    )
-//    check(
-//        testName = "When the user tries to add invalid category type should return false",
-//        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"123"),
-//        acceptedResult =ResultStatus.Error("Invalid Name") ,
-//    )
-//    check(
-//        testName = "When the user tries to add a category with spaces should return false",
-//        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Salary "),
-//        acceptedResult = ResultStatus.Error("Invalid Name") ,
-//    )
-//
-//
+    check(
+
+        testName = "When the user tries to add a category with the same name should return false ",
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Food"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
+    )
+    check(
+        testName = "When the user tries to add a category with an empty string should return false",
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),""),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
+    )
+    check(
+        testName = "When the user tries to add a category with special character should return false",
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"$#%#"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
+    )
+    check(
+        testName = "When the user tries to add invalid category type should return false",
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"123"),
+        acceptedResult =ResultStatus.Error("Invalid Name") ,
+    )
+    check(
+        testName = "When the user tries to add a category with spaces should return false",
+        result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Salary "),
+        acceptedResult = ResultStatus.Error("Invalid Name") ,
+    )
+    
+
 
     //endregion
-
 
 
     // region Edit Category Test Case
     check(
         testName = "When the user edit a category with a valid name and valid id should return true",
         result = false,
-        acceptedResult =true ,
+        acceptedResult = true,
     )
     check(
         testName = "When the user tries to edit a category with the same name and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to edit a category with an empty string and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add invalid category type and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a category with spaces and valid id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a valid category name and negative id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     check(
         testName = "When the user tries to add a valid category name and invalid type of id should return false",
         result = false,
-        acceptedResult =false ,
+        acceptedResult = false,
     )
     //endregion
-
 
 
     //region View Category Test Case
@@ -227,7 +244,6 @@ fun main(){
     )
 
     //endregion
-
 
 
     // region Delete Category Test Case
@@ -330,12 +346,24 @@ fun main(){
 
 //region Monthly Summary Test Cases
 
-    check(testName = "when no transactions in month should return NoTransactions", result = false, acceptedResult = false)
+    check(
+        testName = "when no transactions in month should return NoTransactions",
+        result = false,
+        acceptedResult = false
+    )
     check(testName = "when year is after now should return error", result = false, acceptedResult = false)
-    check(testName = "when month is after current month in current year should return error", result = false, acceptedResult = false)
+    check(
+        testName = "when month is after current month in current year should return error",
+        result = false,
+        acceptedResult = false
+    )
     check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
     check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when valid month with transactions should return correct summary", result = false, acceptedResult = false)
+    check(
+        testName = "when valid month with transactions should return correct summary",
+        result = false,
+        acceptedResult = false
+    )
 
 //endregion
 
@@ -343,6 +371,6 @@ fun main(){
 }
 
 fun <T> check(testName: String, result: T, acceptedResult: T) {
-    if(result == acceptedResult) println("Success - $testName")
+    if (result == acceptedResult) println("Success - $testName")
     else println("Fail - $testName")
 }
