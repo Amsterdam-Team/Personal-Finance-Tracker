@@ -14,6 +14,13 @@ import utils.Validator.isValidTransactionType
 import java.util.*
 
 class TransactionManager(private val fileManager: IFileManager) {
+    fun deleteTransaction(uuid: UUID): ResultStatus<String> {
+        fileManager.getObjectById(uuid.toString(), Transaction::class.java) ?: return ResultStatus.Error(
+            "Transaction not found"
+        )
+        fileManager.deleteObjectById(uuid, Transaction::class.java)
+        return ResultStatus.Success("true")
+    }
     fun viewTransactionById(inputId: String): ResultStatus<Transaction> {
         return when (val validationResult = validateUUID(inputId)) {
             is ResultStatus.Success -> {
