@@ -20,15 +20,19 @@ class TransactionManager(private val fileManager: IFileManager) {
     fun editTransaction(
         transaction: Transaction
     ): ResultStatus<String> {
-        val transactions = fileManager.getAllObjects(Transaction::class.java)
-        val categories = fileManager.getAllObjects(Category::class.java)
+        val transactionFromFile = fileManager.getObjectById(transaction.id.toString(),Transaction::class.java)
+
+        val categoryFromFile = fileManager.getObjectById(transaction.category.id.toString(),Category::class.java)
+
+        if(transactionFromFile == null || categoryFromFile == null)
+            return ResultStatus.Error("Invalid Data")
 
         if (listOf(
-                isValidID(transactions, transaction.id),
+                isValidID(transaction.id),
                 isValidDescription(transaction.description),
                 isValidaType(transaction.type.toString()),
                 isValidDate(transaction.date.toString()),
-                isValidCategory(categories, transaction.category.name),
+                isValidCategory( transaction.category.name),
                 isValidAmount(transaction.amount)
             ).all { it == ResultStatus.Success("success") }
         ) {
@@ -43,37 +47,26 @@ class TransactionManager(private val fileManager: IFileManager) {
     }
 }
 
-fun isValidID(transactions: List<Transaction>, id: UUID): ResultStatus<String> {
+fun isValidID(id: UUID): ResultStatus<String> {
 
 
 
     if (id.toString().contains(" ") || id.toString().isBlank())
         return ResultStatus.Error("Invalid Id")
-    else {
-        val transaction = transactions.find { it.id == id }
-        if (transaction == null)
-            return ResultStatus.Error("Invalid Id")
-    }
-
     return ResultStatus.Success("success")
 }
 
 fun isValidAmount(amount: Double?): ResultStatus<String> {
 
 
-    if (amount != null && amount.toInt() > 0)
+    if (amount != null && amount > 0.0)
         return ResultStatus.Success("success")
     return ResultStatus.Error("Invalid Amount")
 }
 
-fun isValidCategory(categories: List<Category>, category: String): ResultStatus<String> {
+fun isValidCategory (category: String): ResultStatus<String> {
     if (category.isBlank())
         return ResultStatus.Error("Invalid Category")
-    else {
-        val category = categories.find { it.name == category.trim() }
-        if (category == null)
-            return ResultStatus.Error("Invalid Category")
-    }
     return ResultStatus.Success("success")
 
 }
