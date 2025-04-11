@@ -1,8 +1,14 @@
 package test
+import managers.TransactionManager
 import models.Category
+import saver.FileManagerImpl
+import saver.IFileManager
+import java.util.*
 
 
 fun main(){
+    val fileManger : IFileManager = FileManagerImpl()
+    val transactionManager = TransactionManager(fileManger)
 
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
@@ -62,27 +68,27 @@ fun main(){
     // region delete transaction test cases
     check(
         testName = "when there is no any transaction added before should return false",
-        result = false,
+        result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = false
     )
     check(
         testName = "When entered id does not match the id schema should return false",
-        result = false,
+        result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = false
     )
     check(
         testName = "when entered id doesn't exist in the transactions should return false",
-        result = false,
+        result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = false
     )
     check(
         testName = "when entered id is less than zero should return false",
-        result = false,
+        result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = false
     )
     check(
         testName = "when entered id is founded should return true",
-        result = true,
+        result = transactionManager.deleteTransaction(UUID.randomUUID()),
         acceptedResult = true
     )
     // end region
