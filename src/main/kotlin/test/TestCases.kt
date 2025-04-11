@@ -4,8 +4,10 @@ import managers.isValidCategoryName
 import models.Category
 import utils.ResultStatus
 import managers.*
+import models.BalanceReport
 import models.Transaction
 import models.TransactionType
+import reports.BalanceReportManager
 import java.time.LocalDate
 import java.util.*
 import saver.FileManagerImpl
@@ -288,58 +290,61 @@ fun main(){
 //endregion
 
 //region view balance report test cases
+    val fileManagerImpl = FileManagerImpl()
+    val balanceReportManager = BalanceReportManager(fileManagerImpl)
+
     check(
         testName = "1. When there are no transactions in the date range, should return zero income, zero expenses, and zero net balance",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(startDate = LocalDate.of(2030,1,1)),
+        acceptedResult = ResultStatus.Success(data = BalanceReport(0.0, 0.0, 0.0))
     )
 
     check(
         testName = "2. When only income transactions exist in the date range, should return correct income total and zero expenses",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,1), LocalDate.of(2025,4,2)),
+        acceptedResult = ResultStatus.Success(BalanceReport(150.0, 0.0, 150.0))
     )
 
     check(
         testName = "3. When only expense transactions exist in the date range, should return correct expense total and zero income",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,3), LocalDate.of(2025,4,10)),
+        acceptedResult = ResultStatus.Success(BalanceReport(0.0, 50.0, -50.0))
     )
 
     check(
         testName = "4. When both income and expense transactions exist, should return correct totals and net balance",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,1), LocalDate.of(2025,4,10)),
+        acceptedResult = ResultStatus.Success(BalanceReport(150.0, 50.0, 100.0))
     )
 
     check(
-        testName = "5. When start date is after end date, should return null",
-        result = null,
-        acceptedResult = ""
+        testName = "5. When start date is after end date, should return The start date cannot be after the end date Error",
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,10), LocalDate.of(2025,4,1)),
+        acceptedResult = ResultStatus.Error("The start date cannot be after the end date. Please adjust your date range.")
     )
 
     check(
-        testName = "6. When start or end date is invalid should return null",
-        result = null,
-        acceptedResult = ""
+        testName = "6. When start or end date is invalid should invalid date Error",
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,1), LocalDate.of(2026,1,1)),
+        acceptedResult = ResultStatus.Error("The end date cannot be after the current date. Please provide a valid end date.")
     )
 
     check(
         testName = "7. When transactions fall exactly on the start or end date, should include them in the result",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,1), LocalDate.of(2025,4,10)),
+        acceptedResult = ResultStatus.Success(BalanceReport(150.0, 50.0, 100.0))
     )
 
     check(
         testName = "8. When transactions exist but are completely outside the date range, should be excluded from the result",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2019,1,1), LocalDate.of(2019,12,31)),
+        acceptedResult = ResultStatus.Success(BalanceReport(0.0, 0.0, 0.0))
     )
 
     check(
         testName = "9. When all transactions in the range have zero amounts, should return zero income, zero expense, and zero net balance",
-        result = "",
-        acceptedResult = ""
+        result = balanceReportManager.getBalanceReport(LocalDate.of(2025,4,5), LocalDate.of(2025,4,6)),
+        acceptedResult = ResultStatus.Success(BalanceReport(0.0, 0.0, 0.0))
     )
 //endregion
 

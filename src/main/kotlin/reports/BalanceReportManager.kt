@@ -64,7 +64,5 @@ class BalanceReportManager(private val fileManager: IFileManager) {
             "The start date cannot be after the end date. Please adjust your date range."
         private const val EMPTY_TRANSACTION_LIST =
             "No transactions available yet. Start by adding a new transaction to see it here."
-        private const val EMPTY_REPORT_BALANCE =
-            "No transactions found in the selected date range. Please check the dates or add transactions."
     }
 }
