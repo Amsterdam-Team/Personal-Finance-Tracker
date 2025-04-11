@@ -1,13 +1,15 @@
 package ui
 
+import managers.TransactionManager
 import models.Category
 import models.Transaction
 import models.TransactionType
+import utils.ResultStatus
 import java.time.LocalDate
 import java.util.*
 
 //val transactionManager: TransactionManager, val categoryManager: CategoryManager
-class TransactionViewController (){
+class TransactionViewController (val transactionManager: TransactionManager){
     fun addTransaction() {
         var transaction = UiUtils.getTransactionFromUser()
 
@@ -29,8 +31,22 @@ class TransactionViewController (){
             type = TransactionType.EXPENSE,
             date = LocalDate.now()
         )
+        // get old transaction based on the id
+        // edit the old transaction with this new transaction
+
         val newEditedTransaction = UiUtils.getTransactionEditFromUser(t)
-        UiUtils.displayMessage("Transaction updated: ${newEditedTransaction.toString()}")
+        val result = transactionManager.editTransaction(newEditedTransaction)
+        when(result){
+            is ResultStatus.Success -> {
+                UiUtils.displayMessage(result.data)
+
+            }
+            is ResultStatus.Error-> {
+                UiUtils.displayMessage(result.errorMessage)
+
+            }
+            else -> Unit
+        }
 
     }
     fun deleteTransaction(id :UUID){

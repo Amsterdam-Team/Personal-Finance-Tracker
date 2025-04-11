@@ -6,6 +6,7 @@ import models.TransactionType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 import kotlin.reflect.full.memberProperties
 
 class UiUtils {
@@ -164,33 +165,32 @@ class UiUtils {
             println(msg)
         }
 
-        private fun getDateFromUser(oldDate:String? = null): LocalDate{
+         fun getDateFromUser(oldDate:String? = null, msg:String = "enter date here; enter it in this format day/ month/ year or enter 'now' to indicate today"): LocalDate{
             if (oldDate != null){
                 println("the old date is $oldDate, ")
             }
-            var date = LocalDate.now()
-            var value = getUserInput("enter date here; enter it in this format day/ month/ year or enter 'now' to indicate today")
+            var date: LocalDate? = LocalDate.now()
+            var value = getUserInput(message =  msg)
             if (value == "now"){
-                return date
+                return date!!
 
             }else{
-
+                println(value)
                 do {
-                    val dateTimePattern = "dd/MM/yyyy"
+                    val dateTimePattern = "d/M/yyyy"
                      date = try {
-                        LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
-                    } catch (e: Exception){
-                        println("invalid date format; exception: $e")
-                        value = getUserInput("enter date here; enter it in this format day/ month/ year or enter 'now' to indicate today")
-                        continue
-                    }
+                         LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
+                     } catch (e :Exception){
+                         println("invalid date format; use this format (day/moth/year)")
+                         null
+                     }
                     // we need to handle exception if not occurred return date
 
 
-                }while (value.split("/").size != 3)
+                }while (value.split("/").size != 3 || date==null)
 
             }
-            return date
+            return date!!
         }
 
          fun getCategoryUuid(msg: String) :UUID{

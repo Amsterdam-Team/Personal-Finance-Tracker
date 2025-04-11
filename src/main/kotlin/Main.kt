@@ -1,7 +1,11 @@
+import managers.CategoryManager
 import managers.Parser
+import managers.TransactionManager
 import models.Category
 import models.Transaction
 import models.TransactionType
+import reports.BalanceReportManager
+import reports.MonthlySummaryManager
 import saver.FileManagerImpl
 import ui.ApplicationView
 import ui.CategoryViewController
@@ -14,9 +18,10 @@ fun main(args: Array<String>) {
 
 
     val fileManager: FileManagerImpl = FileManagerImpl()
-    val transactionViewController = TransactionViewController()
-    val reportViewController = ReportViewController()
-    val categoryViewController = CategoryViewController()
+
+    val transactionViewController = TransactionViewController(TransactionManager(fileManager))
+    val reportViewController = ReportViewController(MonthlySummaryManager(fileManager), BalanceReportManager(fileManager))
+    val categoryViewController = CategoryViewController(CategoryManager(fileManager))
     val applicationView = ApplicationView(transactionViewController, reportViewController, categoryViewController)
     applicationView.start()
 
