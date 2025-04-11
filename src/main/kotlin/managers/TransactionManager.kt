@@ -1,7 +1,6 @@
 package managers
 
 import models.Transaction
-import models.TransactionViewResult
 import saver.IFileManager
 import utils.ResultStatus
 import java.util.UUID
@@ -14,10 +13,6 @@ import Validators.isValidInputAmount
 import Validators.isValidTransactionType
 import com.sun.jdi.IntegerType
 import models.Category
-import models.Transaction
-import models.TransactionType
-import saver.IFileManager
-import utils.ResultStatus
 import java.text.DateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -26,6 +21,7 @@ import java.util.*
 import java.util.zip.DataFormatException
 
 class TransactionManager(private val fileManager: IFileManager) {
+/*
     fun viewTransactionById(inputId: String): TransactionViewResult {
         return when (val validationResult = validateUUID(inputId)) {
             is ResultStatus.Success -> {
@@ -45,6 +41,7 @@ class TransactionManager(private val fileManager: IFileManager) {
             is ResultStatus.Empty -> TransactionViewResult.Error(validationResult.message)
         }
     }
+*/
 
     fun viewAllTransactions(): List<Pair<String, String>> {
         val transactions = fileManager.getAllObjects(Transaction::class.java)
@@ -53,7 +50,7 @@ class TransactionManager(private val fileManager: IFileManager) {
         }
     }
 
-}
+
 // TODO Moved this function based on the team's feedback
 private fun validateUUID(input: String): ResultStatus<UUID> {
     val trimmed = input.trim()
