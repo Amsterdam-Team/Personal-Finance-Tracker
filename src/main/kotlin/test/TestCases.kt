@@ -122,8 +122,8 @@ fun main(){
 //
 //    check(
 //        testName = "when transaction id is valid UUID and exists then should return success",
-//        result = viewTransactionById(transaction1.id.toString()),
-//        acceptedResult = TransactionViewResult.Success(transaction1),
+//        result = viewTransactionById(transaction.id.toString()),
+//        acceptedResult = TransactionViewResult.Success(transaction),
 //    )
     // endregion
 //region Edit Transaction Test Cases

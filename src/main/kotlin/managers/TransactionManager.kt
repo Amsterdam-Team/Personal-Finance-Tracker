@@ -34,7 +34,7 @@ class TransactionManager(private val fileManager: IFileManager) {
     }
 
 }
-
+// TODO Moved this function based on the team's feedback
 private fun validateUUID(input: String): ResultStatus<UUID> {
     val trimmed = input.trim()
     if (trimmed.isEmpty()) {
