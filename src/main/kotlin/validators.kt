@@ -70,4 +70,22 @@ object Validators {
         }
         return ResultStatus.Error("Invalid Name")
     }
+    fun isValidID(id: UUID): ResultStatus<String> {
+
+
+
+        if (id.toString().contains(" ") || id.toString().isBlank())
+            return ResultStatus.Error("Invalid Id")
+        return ResultStatus.Success("success")
+    }
+    fun isValidCategory (category: String): ResultStatus<String> {
+        if (category.isBlank())
+            return ResultStatus.Error("Invalid Category")
+        return ResultStatus.Success("success")
+
+    }
+
+
+
+
 }
