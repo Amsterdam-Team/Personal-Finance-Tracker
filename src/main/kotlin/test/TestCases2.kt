@@ -83,6 +83,37 @@ fun main(){
         acceptedResult =ResultStatus.Success("Category deleted successfully!") ,
     )
 
+
+    //region add Category Test Case
+    check(
+
+        testName = "When the user tries to add a category with the same name should return false ",
+        result = categoryManager.addCategory(UUID.randomUUID(),"Salary"),
+        acceptedResult = ResultStatus.Error("Invalid Data") ,
+    )
+    check(
+        testName = "When the user tries to add a category with an empty string should return false",
+        result = categoryManager.addCategory(UUID.randomUUID(),""),
+        acceptedResult =ResultStatus.Error("Invalid Data") ,
+    )
+    check(
+        testName = "When the user tries to add a category with special character should return false",
+        result = categoryManager.addCategory(UUID.randomUUID(),"$#%#"),
+        acceptedResult =ResultStatus.Error("Invalid Data") ,
+    )
+    check(
+        testName = "When the user tries to add invalid category type should return false",
+        result = categoryManager.addCategory(UUID.randomUUID(),"123"),
+        acceptedResult =ResultStatus.Error("Invalid Data") ,
+    )
+    check(
+        testName = "When the user tries to add a category with spaces should return false",
+        result = categoryManager.addCategory(UUID.randomUUID(),"Salary "),
+        acceptedResult = ResultStatus.Error("Invalid Data") ,
+    )
+
+    //endregion
+
     //endregion
 
 
