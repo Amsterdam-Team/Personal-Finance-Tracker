@@ -8,10 +8,8 @@ import models.TransactionType
 import models.reports.CategorySummary
 import models.reports.MonthlySummary
 import reports.MonthlySummaryManager
-import models.Category
 import saver.FileManagerImpl
 import utils.ResultStatus
-import utils.Validator
 import java.io.File
 import java.util.UUID
 import utils.Validator.isValidDate
@@ -19,7 +17,6 @@ import utils.Validator.isValidInput
 import utils.Validator.isValidInputAmount
 import utils.Validator.isValidTransactionType
 import java.time.LocalDate
-import java.util.*
 
 fun main() {
     val fileManager = FileManagerImpl()
@@ -211,6 +208,8 @@ fun main() {
     )
 
     //endregion
+    //region Monthly summary test cases
+clearSaveFile()
     val carCategoryId = UUID.fromString("11111111-1111-1111-1111-111111111111")
     val salaryCategoryId = UUID.fromString("22222222-2222-2222-2222-222222222222")
     val rentCategoryId = UUID.fromString("33333333-3333-3333-3333-333333333333")
@@ -224,19 +223,39 @@ fun main() {
     val rentCategory = Category(id = rentCategoryId, name = "rent")
 
     val testTransactions = listOf(
-        Transaction(id = transaction1Id, 5000.0, description = "Salary", date = LocalDate.of(2023,6,1), category = salaryCategory,type = TransactionType.INCOME),
-        Transaction(id = transaction2Id, 200.0, description = "fuel", date =  LocalDate.of(2023,6,5), category = carCategory, type =  TransactionType.EXPENSE),
-        Transaction(id = transaction3Id, 1000.0, description = "Rent", date = LocalDate.of(2023,5,1), category = rentCategory, type =  TransactionType.EXPENSE)
+        Transaction(
+            id = transaction1Id,
+            5000.0,
+            description = "Salary",
+            date = LocalDate.of(2023, 6, 1),
+            category = salaryCategory,
+            type = TransactionType.INCOME
+        ),
+        Transaction(
+            id = transaction2Id,
+            200.0,
+            description = "fuel",
+            date = LocalDate.of(2023, 6, 5),
+            category = carCategory,
+            type = TransactionType.EXPENSE
+        ),
+        Transaction(
+            id = transaction3Id,
+            1000.0,
+            description = "Rent",
+            date = LocalDate.of(2023, 5, 1),
+            category = rentCategory,
+            type = TransactionType.EXPENSE
+        )
     )
-    fileManager.getObjectById<Transaction>(transaction1Id.toString(), Transaction::class.java)
-        ?.let {
+
             fileManager.saveObject(carCategory)
             fileManager.saveObject(salaryCategory)
             fileManager.saveObject(rentCategory)
             fileManager.saveObject(testTransactions[0])
             fileManager.saveObject(testTransactions[1])
             fileManager.saveObject(testTransactions[2])
-        }
+
 
 
     check(
@@ -293,10 +312,8 @@ fun main() {
             )
         )
     )
-    //region Monthly summary test cases
 
-
-
+clearSaveFile()
 //endregion
 
 }
