@@ -1,9 +1,13 @@
 package saver
 
 import managers.Parser
+import models.Transaction
 import java.io.File
 import java.io.ObjectInput
 import java.util.*
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.jvmErasure
 
 class FileManagerImpl: IFileManager {
 
@@ -14,8 +18,13 @@ class FileManagerImpl: IFileManager {
         if (!file.exists()){
             file.createNewFile()
         }
+//        Class.forName("models.${inputObject.toString().substring(0,inputObject.toString().indexOf('('))}").kotlin.primaryConstructor?.parameters?.forEach {
+//            if (it.type.jvmErasure.isData){
+//                saveObject(it)
+//            }
+//        }
         if (inputObject != null){
-            file.appendText("${inputObject}\n")
+            file.appendText("\n${inputObject}\n")
         }
     }
 
