@@ -4,6 +4,7 @@ import models.Transaction
 import models.TransactionType
 import saver.FileManagerImpl
 import ui.ApplicationView
+import ui.ReportViewController
 import ui.TransactionViewController
 import java.time.LocalDate
 import java.util.UUID
@@ -13,7 +14,8 @@ fun main(args: Array<String>) {
 
     val fileManager: FileManagerImpl = FileManagerImpl()
     val transactionViewController = TransactionViewController()
-    val applicationView = ApplicationView(transactionViewController)
+    val reportViewController = ReportViewController()
+    val applicationView = ApplicationView(transactionViewController, reportViewController)
     applicationView.start()
 
 //    println(fileManager.getAllObjects(Category::class.java))

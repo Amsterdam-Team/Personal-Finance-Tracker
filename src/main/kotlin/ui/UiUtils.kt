@@ -134,7 +134,7 @@ class UiUtils {
             return value.toDouble()
 
         }
-        fun getUserInput(message: String, data: String?=null, last: String = "\n"): String{
+        fun getUserInput(message: String, data: String?=null, last: String = "\n"):String {
             var value: String
             if (data != null){
                 do {
@@ -152,8 +152,10 @@ class UiUtils {
                     }
 
                     value = readln()
-                }while (value.isEmpty())
+
+                }while ( value.isEmpty())
             }
+
 
 
             return value
@@ -189,6 +191,23 @@ class UiUtils {
 
             }
             return date
+        }
+
+        fun getUserUUID(): UUID{
+            var transUuid: UUID?
+            do {
+                var trnasId = UiUtils.getUserInput("enter the transaction id ")
+                transUuid = try {
+                    UUID.fromString(trnasId)
+                } catch (e: Exception) {
+                    null
+
+                }
+                if (transUuid == null){
+                    println("invalid uuid; please enter valid uuid")
+                }
+            }while (transUuid == null)
+            return transUuid
         }
     }
 }

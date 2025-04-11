@@ -36,7 +36,10 @@ class TransactionViewController (){
         UiUtils.displayMessage("Transaction updated: ${newEditedTransaction.toString()}")
 
     }
-    fun deleteTransaction(id :UUID){}
+    fun deleteTransaction(id :UUID){
+        println("deleting this transaction")
+        return
+    }
     fun getAllTransactions(){
         val trnasList = listOf<Transaction>(
             Transaction(

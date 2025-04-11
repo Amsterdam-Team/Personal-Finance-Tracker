@@ -2,7 +2,7 @@ package ui
 
 import java.util.*
 
-class ApplicationView (val transController :TransactionViewController) {
+class ApplicationView (val transController :TransactionViewController, val reportController: ReportViewController) {
     fun start(){
         var name = " "
         do {
@@ -41,36 +41,80 @@ class ApplicationView (val transController :TransactionViewController) {
     }
 
 
-     fun handleUserCommand(command:String){
+     private fun handleUserCommand(command:String){
         when(command.lowercase()){
-            "T".lowercase() -> handleTransactionCommand()
-            "exit".lowercase() -> {
+            "t" -> handleTransactionCommand()
+            "exit" -> {
                 println("see you soon, bye")
                 return
             }
+            "ms"-> {
+                handleMonthlySummary()
+            }
+            else -> {
+                showAvailableCommands()
+                var userCommand = UiUtils.getUserInput("Enter specific command")
+                handleUserCommand(userCommand.toString())
+            }
 
         }
+
     }
-    fun handleTransactionCommand(){
+    private fun handleTransactionCommand(){
         showTransCommand()
-        val command = UiUtils.getUserInput("enter command here: ", last = " ").toInt()
+        val command = UiUtils.getUserInput("enter command here: ", last = " ").toIntOrNull() ?: handleTransactionCommand()
         when(command){
-            1 -> transController.addTransaction()
-            2 -> transController.getAllTransactions()
+            1 -> {
+                transController.addTransaction()
+                reshowMajorCommands()
+            }
+            2 -> {
+                transController.getAllTransactions()
+                reshowMajorCommands()
+            }
             4 -> {
 
-                var transUuid: UUID?
-                do {
-                    var trnasId = UiUtils.getUserInput("enter the transaction id ")
-                     transUuid = try {
-                        UUID.fromString(trnasId)
-                    } catch (e: Exception) {
-                        null
-                    }
-                }while (transUuid == null)
-                transController.editTransaction(transUuid)
+               val transactionUuid =UiUtils.getUserUUID()
+                transController.editTransaction(transactionUuid)
+                reshowMajorCommands()
+            }
+            3 -> {
+                val transactionUUID =UiUtils.getUserUUID()
+                transController.deleteTransaction(transactionUUID)
+                reshowMajorCommands()
+            }
+            else -> {
+                println("enter valid transaction command")
+                handleTransactionCommand()
+
             }
         }
+    }
+    private fun handleMonthlySummary(){
+        var month :Int?
+        do {
+           month = UiUtils.getUserInput("Enter specific month", last = " ").toIntOrNull()
+
+        }while (month !in 1..12 || month == null)
+
+        var year :Int?
+
+        do {
+            year = UiUtils.getUserInput("Enter specific year", last = " ").toIntOrNull()
+
+        }while (year == null)
+
+
+        reportController.getMonthlySummary(month=month, year=year)
+        reshowMajorCommands()
+
+
+    }
+
+    private fun reshowMajorCommands(){
+        showAvailableCommands()
+        var userCommand = UiUtils.getUserInput("Enter specific command")
+        handleUserCommand(userCommand.toString())
     }
 
 }
