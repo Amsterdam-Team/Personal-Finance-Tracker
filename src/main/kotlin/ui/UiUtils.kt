@@ -3,6 +3,8 @@ package ui
 import models.Category
 import models.Transaction
 import models.TransactionType
+import utils.ResultStatus
+import utils.Validator
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -166,7 +168,7 @@ class UiUtils {
             println(msg)
         }
 
-         fun getDateFromUser(oldDate:String? = null, msg:String = "enter date here; enter it in this format day/ month/ year or enter 'now' to indicate today"): LocalDate{
+         fun getDateFromUser(oldDate:String? = null, msg:String = "enter date here; enter it in this format year-month-day or enter 'now' to indicate today"): LocalDate{
             if (oldDate != null){
                 println("the old date is $oldDate, ")
             }
@@ -178,13 +180,27 @@ class UiUtils {
             }else{
                 println(value)
                 do {
-                    val dateTimePattern = "d/M/yyyy"
-                     date = try {
-                         LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
-                     } catch (e :Exception){
-                         println("invalid date format; use this format (day/moth/year)")
-                         null
-                     }
+
+                    value = getUserInput(message =  msg)
+
+                     val result = Validator.isValidDate(value)
+                    when(result){
+                        is ResultStatus.Success ->{
+                            return result.data
+                        }
+                        is ResultStatus.Error ->{
+                            UiUtils.displayMessage(result.errorMessage)
+                            date= null
+                        }
+                        else -> Unit
+
+                    }
+//                         try {
+//                         LocalDate.parse(value, DateTimeFormatter.ofPattern(dateTimePattern))
+//                     } catch (e :Exception){
+//                         println("invalid date format; use this format (day/moth/year)")
+//                         null
+//                     }
                     // we need to handle exception if not occurred return date
 
 
