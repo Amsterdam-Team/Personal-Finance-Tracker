@@ -1,5 +1,7 @@
 package managers
 
+import Validators.isValidCategoryID
+import Validators.isValidCategoryName
 import models.Category
 import saver.IFileManager
 import utils.ResultStatus
@@ -66,27 +68,5 @@ class CategoryManager(private val fileManager: IFileManager) {
         return ResultStatus.Error("Invalid Data")
     }
 
-    fun isValidCategoryID(categories: List<Category>, id: UUID): ResultStatus<String> {
-        if (id.toString().isBlank() || id.toString().contains(" "))
-            return ResultStatus.Error("Invalid Id")
-        else {
-            val category = categories.find { it.id == id }
-            if (category == null)
-                return ResultStatus.Success("success")
-        }
-        return ResultStatus.Error("Id Already Exists")
-    }
 
-    fun isValidCategoryName(categories: List<Category>, name: String): ResultStatus<String> {
-        if (name.isBlank() || name.contains(' '))
-            return ResultStatus.Error("Invalid Name")
-        else {
-            if (name.matches(Regex("^[a-zA-Z ]+$"))) {
-                val category = categories.find { it.name == name }
-                if (category == null)
-                    return ResultStatus.Success("success")
-            }
-        }
-        return ResultStatus.Error("Invalid Name")
-    }
 }

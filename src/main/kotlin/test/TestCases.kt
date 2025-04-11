@@ -1,14 +1,21 @@
 package test
 
-import managers.isValidCategoryName
+import Validators.isValidCategoryName
 import models.Category
 import utils.ResultStatus
 import managers.*
 import models.Transaction
 import models.TransactionType
+import models.reports.CategorySummary
+import models.reports.MonthlySummary
+import reports.MonthlySummaryManager
 import java.time.LocalDate
 import java.util.*
 import saver.FileManagerImpl
+
+import utils.Validator.isValidInputAmount
+import utils.Validator.isValidTransactionType
+import saver.IFileManager
 
 
 fun main(){
@@ -84,6 +91,75 @@ fun main(){
         acceptedResult = false
     )
     //endregion
+
+    // region delete transaction test cases
+    check(
+        testName = "when there is no any transaction added before should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "When entered id does not match the id schema should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id doesn't exist in the transactions should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is less than zero should return false",
+        result = false,
+        acceptedResult = false
+    )
+    check(
+        testName = "when entered id is founded should return true",
+        result = true,
+        acceptedResult = true
+    )
+    // end region
+    // region view transaction test cases
+    check(
+        testName = "when transaction id is not found then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    check(
+        testName = "when transaction id is found then should return transaction",
+        result= true,
+        acceptedResult = true,
+    )
+    check(
+        testName = "when transaction id is not valid then should return null",
+        result= false,
+        acceptedResult = false,
+    )
+    //    check(
+//        testName = "when transaction id is empty then should return error",
+//        result = viewTransactionById("   "),
+//        acceptedResult = TransactionViewResult.Error("Input is empty or contains only spaces."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is not a valid UUID then should return error",
+//        result = viewTransactionById("123-not-a-uuid"),
+//        acceptedResult = TransactionViewResult.Error("You must enter a valid UUID."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is valid UUID but not found then should return error",
+//        result = viewTransactionById("550e8400-e29b-41d4-a716-446655440000"), // assuming it's not in file
+//        acceptedResult = TransactionViewResult.Error("Transaction not found."),
+//    )
+//
+//    check(
+//        testName = "when transaction id is valid UUID and exists then should return success",
+//        result = viewTransactionById(transaction.id.toString()),
+//        acceptedResult = TransactionViewResult.Success(transaction),
+//    )
+    // endregion
+
         // region view transaction test cases
         check(
             testName = "when transaction id is not found then should return null",
@@ -101,6 +177,7 @@ fun main(){
             acceptedResult = false,
         )
         // endregion
+
 //region Edit Transaction Test Cases
 
 
@@ -118,8 +195,7 @@ fun main(){
     check(
         testName = "when id of transaction is invalid should return false",
 
-        result = isValidID(listOf(Transaction(UUID.randomUUID(), 125.4,"",LocalDate.now(),Category(UUID.randomUUID(),""),TransactionType.EXPENSE)),
-            UUID.randomUUID()),
+        result = isValidID(UUID.randomUUID()),
         acceptedResult = ResultStatus.Error("Invalid Id")
     )
     check(
@@ -145,12 +221,12 @@ fun main(){
     )
     check(
         testName = "when category type is empty should return false",
-        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food")),""),
+        result = isValidCategory(""),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     check(
         testName = "when category type is invalid return false",
-        result = isValidCategory(listOf(Category(UUID.randomUUID(),"Food"),Category(UUID.randomUUID(),"Salary")),"Shopping"),
+        result = isValidCategory("Shopping"),
         acceptedResult = ResultStatus.Error("Invalid Category")
     )
     //endregion
@@ -186,7 +262,7 @@ fun main(){
         result = isValidCategoryName(listOf(Category(UUID.randomUUID(),"Food")),"Salary "),
         acceptedResult = ResultStatus.Error("Invalid Name") ,
     )
-    
+
 
 
     //endregion
@@ -345,25 +421,53 @@ fun main(){
 
 
 //region Monthly Summary Test Cases
-
+val fileMgr: IFileManager = FileManagerImpl()
+    val carCategory = Category(UUID.randomUUID(), name = "car")
+    val salaryCategory = Category(UUID.randomUUID(), name = "salary")
+    val rentCategory = Category(UUID.randomUUID(), name = "rent")
+    fileMgr.saveObject(carCategory)
+    fileMgr.saveObject(salaryCategory)
+    fileMgr.saveObject(rentCategory)
+    val testTransactions = listOf(
+        Transaction(UUID.randomUUID(), 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME),
+        Transaction(UUID.randomUUID(), 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE),
+        Transaction(UUID.randomUUID(), 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE)
+    )
+    fileMgr.saveObject(Transaction(UUID.randomUUID(), 5000.0, "Salary", LocalDate.of(2023,6,1), salaryCategory, TransactionType.INCOME))
+    fileMgr.saveObject(Transaction(UUID.randomUUID(), 200.0, "fuel", LocalDate.of(2023,6,5), carCategory, TransactionType.EXPENSE))
+    fileMgr.saveObject( Transaction(UUID.randomUUID(), 1000.0, "Rent", LocalDate.of(2023,5,1), rentCategory, TransactionType.EXPENSE))
     check(
         testName = "when no transactions in month should return NoTransactions",
-        result = false,
-        acceptedResult = false
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(2023, 7),
+        acceptedResult = ResultStatus.Empty("There are no transactions this month")
     )
-    check(testName = "when year is after now should return error", result = false, acceptedResult = false)
+
     check(
-        testName = "when month is after current month in current year should return error",
-        result = false,
-        acceptedResult = false
+        testName = "when year is after now should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(LocalDate.now().year + 1, 6),
+        acceptedResult = ResultStatus.Error("Cannot view summary for future years")
     )
-    check(testName = "when month number is invalid should return error", result = false, acceptedResult = false)
-    check(testName = "when year number is invalid should return error", result = false, acceptedResult = false)
+
     check(
-        testName = "when valid month with transactions should return correct summary",
-        result = false,
-        acceptedResult = false
+        testName = "when month is after current month in current year should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1),
+        acceptedResult = ResultStatus.Error("Cannot view summary for future months")
     )
+
+    check(
+        testName = "when month number is invalid should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(2023, 13),
+        acceptedResult = ResultStatus.Error("Month must be between 1 and 12")
+    )
+
+    check(
+        testName = "when year number is invalid should return Error",
+        result = MonthlySummaryManager(fileMgr).getMonthlySummary(1999, 6),
+        acceptedResult = ResultStatus.Error("Year must be 2000 or later")
+    )
+
+
+
 
 //endregion
 
