@@ -6,10 +6,10 @@ import models.TransactionType
 import utils.ResultStatus
 import java.time.LocalDate
 import java.util.*
+import saver.FileManagerImpl
 
 
 fun main(){
-
 //region Transactions Test Cases
 //todo: write all test cases that related with transactions here :)
        //region add transaction test cases
@@ -222,11 +222,7 @@ fun main(){
         result = false,
         acceptedResult = true
     )
-    check(
-        testName = "When not exist list of category should return false",
-        result = false,
-        acceptedResult = false
-    )
+
     //endregion
 
 
