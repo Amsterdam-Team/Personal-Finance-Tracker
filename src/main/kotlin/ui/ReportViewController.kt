@@ -7,5 +7,8 @@ class ReportViewController {
         UiUtils.displayMessage("monthly summary for this date ${month}/${year} is .......")
     }
 
-    fun getBalanceReport(){}
+    fun getBalanceReport(){
+        UiUtils.displayMessage("creating your balance report now .....")
+        UiUtils.displayMessage("your balance report is .")
+    }
 }

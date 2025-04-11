@@ -35,7 +35,9 @@ class ApplicationView (val transController :TransactionViewController, val repor
             "c" -> {
                 handleCategoryCommand()
             }
-
+            "br" ->{
+                handleBalanceReport()
+            }
             else -> {
                 showAvailableCommands()
                 var userCommand = UiUtils.getUserInput("Enter specific command")
@@ -105,6 +107,12 @@ class ApplicationView (val transController :TransactionViewController, val repor
 
             }
         }
+    }
+    private fun handleBalanceReport(){
+
+        reportController.getBalanceReport()
+        reshowMajorCommands()
+
     }
     private fun handleMonthlySummary(){
         var month :Int?
