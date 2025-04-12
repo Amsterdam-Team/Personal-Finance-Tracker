@@ -101,8 +101,16 @@ private fun validateUUID(input: String): ResultStatus<UUID> {
             ).all { it == ResultStatus.Success("success") }
         ) {
             fileManager.deleteObjectById(transaction.id,Transaction::class.java)
-            fileManager.saveObject(transaction)
-            return ResultStatus.Success("Transaction Edited Successfully")
+            var result = addTransaction(transaction)
+            when (result) {
+                is ResultStatus.Success -> return ResultStatus.Success("Transaction Edited Successfully")
+                is ResultStatus.Error -> {
+                    return  ResultStatus.Error(result.errorMessage)
+                }
+                is ResultStatus.Empty -> {
+                    return  ResultStatus.Error(result.message)
+                }
+            }
         } else {
             return ResultStatus.Error("Invalid Data")
         }

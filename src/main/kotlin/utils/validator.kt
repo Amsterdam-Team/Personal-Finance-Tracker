@@ -38,6 +38,9 @@ object Validator {
         return ResultStatus.Success("success")
     }
     fun isValidDate(inputDate:String):ResultStatus<LocalDate>{
+        if(inputDate.isBlank() || inputDate.isEmpty()){
+            return ResultStatus.Empty("please enter the date")
+        }
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return try {
             val date = LocalDate.parse(inputDate, formatter)
