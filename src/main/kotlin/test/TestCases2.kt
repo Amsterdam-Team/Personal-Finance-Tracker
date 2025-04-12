@@ -24,7 +24,7 @@ fun main() {
     val categoryManager = CategoryManager(fileManager)
 
 
-//region add transaction test cases
+    //region add transaction test cases
     check(
         testName = "when amount is empty should return false",
         result = isValidInputAmount(""),
@@ -141,7 +141,7 @@ fun main() {
     }
     // endregion
 
-//region Edit Transaction Test Cases
+    //region Edit Transaction Test Cases
 
 
     check(
@@ -259,7 +259,7 @@ fun main() {
 
     //region Category Test Cases
 
-    val categoryId = UUID.randomUUID()
+    val categoryId = UUID.fromString("11111111-1111-1111-1111-111111111111")
     check(
 
         testName = "When the user tries to add a valid category  should return true ",
@@ -281,10 +281,12 @@ fun main() {
 
 
     //region add Category Test Case
+    val categoryId1 = UUID.randomUUID()
+    fileManager.saveObject(
+        Category(id = categoryId1, name = "Salary"))
     check(
-
-        testName = "When the user tries to add a category with the same name should return false ",
-        result = categoryManager.addCategory(UUID.randomUUID(), "Salary"),
+        testName = "When the user tries to add a category with the same name should return false",
+        result = categoryManager.addCategory(categoryId1, "Salary"),
         acceptedResult = ResultStatus.Error("Invalid Data"),
     )
     check(
@@ -375,7 +377,10 @@ fun main() {
 
     check(
         "when month is after current month in current year should return Error",
-        MonthlySummaryManager(fileManager).getMonthlySummary(LocalDate.now().year, LocalDate.now().monthValue + 1),
+        MonthlySummaryManager(fileManager).getMonthlySummary(
+            LocalDate.now().year,
+            LocalDate.now().monthValue + 1
+        ),
         ResultStatus.Error("Cannot view summary for future months")
     )
 
@@ -419,6 +424,70 @@ fun main() {
     clearSaveFile()
 //endregion
 
+    // region Edit Category Test Case
+    fileManager.saveObject(
+        Category(
+            UUID.fromString("11111111-1111-1111-1111-111111111111"),
+            "Food"
+        )
+    )
+    check(
+        testName = "When the user edit a category with a valid name and valid id should return true",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "Food",
+            categoryID = UUID.fromString("11111111-1111-1111-1111-111111111111").toString()
+        ),
+        acceptedResult = ResultStatus.Success("Success Editing"),
+    )
+    check(
+        testName = "When the user tries to edit a category with an empty string and valid id should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "",
+            categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    check(
+        testName = "When the user tries to add a category with special character and invalid id (out of range) should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "@@",
+            categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az-5545454"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    check(
+        testName = "When the user tries to add invalid category type and valid id should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "4565465",
+            categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    check(
+        testName = "When the user tries to add a category with spaces and valid id should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = " Food ",
+            categoryID = "5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    check(
+        testName = "When the user tries to add a valid category name and negative id should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "Food",
+            categoryID = "-5b4d7e3a-e4be-487e-9151-4bd94bb50e4az"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    check(
+        testName = "When the user tries to add a valid category name and invalid type of id should return false",
+        result = categoryManager.isValidCategoryToEdit(
+            categoryName = "Food",
+            categoryID = "kah;khf"
+        ),
+        acceptedResult = ResultStatus.Error("Please Enter Valid Id and Name"),
+    )
+    //endregion
 }
 
 fun <T> check(testName: String, result: T, acceptedResult: T) {
