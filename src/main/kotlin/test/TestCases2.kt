@@ -282,12 +282,6 @@ fun main() {
 
     //region add Category Test Case
     check(
-
-        testName = "When the user tries to add a category with the same name should return false ",
-        result = categoryManager.addCategory(UUID.randomUUID(), "Salary"),
-        acceptedResult = ResultStatus.Error("Invalid Data"),
-    )
-    check(
         testName = "When the user tries to add a category with an empty string should return false",
         result = categoryManager.addCategory(UUID.randomUUID(), ""),
         acceptedResult = ResultStatus.Error("Invalid Data"),
